@@ -1,5 +1,6 @@
 package com.cloriti.workshiftmanager.display;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;

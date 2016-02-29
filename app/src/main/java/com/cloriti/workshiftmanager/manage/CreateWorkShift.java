@@ -1,6 +1,7 @@
 package com.cloriti.workshiftmanager.manage;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +25,7 @@ public class CreateWorkShift extends AppCompatActivity {
         setContentView(R.layout.activity_create_work_shift);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         final Bundle inputBundle = this.getIntent().getExtras();
         outputIntent = new Intent(getApplicationContext(), ManageWorkShift.class);
         TextView title = (TextView) findViewById(R.id.title_add_turn_menu);

@@ -105,4 +105,5 @@
 
     <!-- DisplayOreSettimanali -->
     <string name="title_ore_settimanali">Ore settimanali</string>
+    <string name="title_activity_display_mounth">DisplayMounth</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.cloriti.workshiftmanager.display;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -27,6 +28,7 @@ public class DisplayWorkShift extends AppCompatActivity {
         setContentView(R.layout.activity_display_work_shift);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         CalendarView calendar = (CalendarView) findViewById(R.id.calendar);
         Button back = (Button) findViewById(R.id.back);

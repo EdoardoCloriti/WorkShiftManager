@@ -3,6 +3,7 @@ package com.cloriti.workshiftmanager.manage;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -27,6 +28,7 @@ public class SelectOvertime extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+      
         Bundle input = this.getIntent().getExtras();
         outputIntent = new Intent(getApplicationContext(), AddOvertime.class);
         outputIntent.putExtra(IDs.DATA, input.getString(IDs.DATA));

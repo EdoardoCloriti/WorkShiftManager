@@ -1,6 +1,7 @@
 package com.cloriti.workshiftmanager.display;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -29,6 +30,7 @@ public class DisplaySettimana extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        
         final CalendarView calendar = (CalendarView) findViewById(R.id.calendar);
         Button back = (Button) findViewById(R.id.back);
 

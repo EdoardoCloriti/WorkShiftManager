@@ -73,6 +73,10 @@
         <activity
             android:name=".display.DisplayHourWeek"
             android:label="@string/title_activity_display_hour_week"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".display.DisplayMounth"
+            android:label="@string/title_activity_display_mounth"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
