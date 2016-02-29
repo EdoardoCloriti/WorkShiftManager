@@ -25,6 +25,18 @@
         <activity
             android:name=".com.cloriti.workshiftmanager.manage.MultiSelectionMenu"
             android:label="@string/title_activity_multi_selection_menu"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".com.cloriti.workshiftmanager.manage.ManageWorkShift"
+            android:label="@string/title_activity_manage_work_shift"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".com.cloriti.workshiftmanager.manage.CreateWorkShift"
+            android:label="@string/title_activity_create_work_shift"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".com.cloriti.workshiftmanager.manage.SelectHours"
+            android:label="@string/title_activity_select_hours"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
