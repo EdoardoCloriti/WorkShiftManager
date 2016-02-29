@@ -26,10 +26,10 @@
         android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/back_upper"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:text="@string/back_upper" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:id="@+id/inserisci_mattina"
@@ -53,8 +53,8 @@
         android:id="@+id/priority"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/inserisci_pomeriggio"
         android:checked="false"
-        android:text="@string/importante" />
+        android:text="@string/importante"
+        android:layout_below="@+id/inserisci_pomeriggio"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

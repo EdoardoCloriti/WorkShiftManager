@@ -68,5 +68,4 @@
         android:inputType="time"
         android:layout_alignTop="@+id/ore"
         android:layout_toRightOf="@+id/title" />
-
 </RelativeLayout>
