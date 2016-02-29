@@ -1,6 +1,7 @@
 package com.cloriti.workshiftmanager.manage;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -12,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.cloriti.workshiftmanager.R;
@@ -25,10 +27,10 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 public class AddOvertime extends AppCompatActivity {
-
+    Dialog d;
     private static final int MONDAY = 1;
-
-    List<Turn> turns = null;
+    private Turn turn = null;
+    private List<Turn> turns = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +55,10 @@ public class AddOvertime extends AppCompatActivity {
                 SimpleDateFormat sdf = new SimpleDateFormat(Turn.PATTERN);
                 String selectedDay = new String(sdf.format(day.getTime()));
                 Toast.makeText(getApplicationContext(), selectedDay, Toast.LENGTH_SHORT).show();
-                select.putExtra(IDs.DATA, selectedDay);
-                startActivityForResult(select, 1);
+
+                Button submit = (Button) findViewById(R.id.submit_dialog);
+                Button back = (Button) findViewById(R.id.back_dialog);
+                createDialog(selectedDay);
             }
 
         });
@@ -64,7 +68,7 @@ public class AddOvertime extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AccessToDB access = new AccessToDB();
-                int n = access.updateTurn(turns, getApplicationContext());
+                int n = access.insertTurns(turns, getApplicationContext());
                 turns = null;
                 finish();
             }
@@ -80,6 +84,45 @@ public class AddOvertime extends AppCompatActivity {
         });
 
 
+    }
+
+    private void createDialog(String selectedDate) {
+        AccessToDB db = new AccessToDB();
+        turn = db.getTurnBySelectedDay(selectedDate, getApplicationContext());
+        if(turn.isNull()) {
+            turn = new Turn();
+            turn.setDatariferimento(selectedDate);
+        }
+        d = new Dialog(AddOvertime.this);
+        d.setTitle("Prova");
+        d.setContentView(R.layout.dialog_overtime);
+        d.show();
+        Button submit = (Button) d.findViewById(R.id.submit_dialog);
+        Button back = (Button) d.findViewById(R.id.back_dialog);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText ore = (EditText) d.findViewById(R.id.ore);
+                EditText minuti = (EditText) d.findViewById(R.id.minuti);
+                double hours = 0;
+                double min = 0;
+                min = validateMinutes(getInteger(minuti.getText().toString()));
+                hours = validateHours(getInteger(ore.getText().toString()));
+                double overtime = min + hours;
+                overtime = turn.getOvertime() + overtime;
+                turn.setOvertime(overtime);
+                turns.add(turn);
+                d.dismiss();
+            }
+        });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                d.dismiss();
+            }
+        });
     }
 
     private void setCalendar(CalendarView calendar) {
@@ -148,5 +191,15 @@ public class AddOvertime extends AppCompatActivity {
             turns.add(turn);
         }
     }
+
+    private int getInteger(String str) {
+        try {
+            return Integer.parseInt(str);
+        } catch (Throwable t) {
+            return 0;
+        }
+    }
+
+
 
 }

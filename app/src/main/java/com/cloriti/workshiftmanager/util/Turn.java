@@ -57,6 +57,14 @@ public class Turn {
         return turn;
     }
 
+    public boolean isNull()
+    {
+        if(this.datariferimento==null)
+            return true;
+        else
+            return false;
+    }
+
     public static boolean intervalIsNotNull(String interval) {
         return interval == null || "null:null".equals(interval) ? false : true;
     }
