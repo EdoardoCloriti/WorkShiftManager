@@ -66,4 +66,43 @@
     <string name="inizio">INIZIO:</string>
     <string name="fine">FINE:</string>
     <string name="cancella">Elimina Turno</string>
+    <string name="title_activity_add_overtime">AddOvertime</string>
+    <string name="title_activity_select_overtime">SelectOvertime</string>
+
+    <!-- ManageOvertime && Starling -->
+    <string name="ore">ORE:</string>
+    <string name="minuti">MINUTI:</string>
+    <string name="title_overtime_manage">INSERISCI STRAORDINARI:</string>
+    <string name="title_starling_manage">INSERISCI STORNO ORE:</string>
+    <string name="title_activity_starling_hours">StarlingHours</string>
+    <string name="title_activity_display_year">DisplayYear</string>
+
+    <!-- visualYear -->
+    <string name="anno">Anno:</string>
+    <string name="gennaio">Gennaio</string>
+    <string name="febbraio">Febbraio</string>
+    <string name="marzo">Marzo</string>
+    <string name="aprile">Aprile</string>
+    <string name="maggio">Maggio</string>
+    <string name="giugno">Giugno</string>
+    <string name="luglio">Luglio</string>
+    <string name="agosto">Agosto</string>
+    <string name="settembre">Settembre</string>
+    <string name="ottobre">Ottobre</string>
+    <string name="novembre">Novembre</string>
+    <string name="dicembre">Dicembre</string>
+
+    <!-- DisplaysMounth -->
+    <string name="selectmount">Seleziona il mese desiderato:</string>
+    <string name="mounth">Mese:</string>
+    <string name="year">Year:</string>
+    <string name="title_visual">ORE MENSILI</string>
+    <string name="oresettimanali">Ore:</string>
+    <string name="straoridinari">Straordinari:</string>
+    <string name="title_activity_mounth_selection">MounthSelection</string>
+    <string name="title_activity_display_settimana">DisplaySettimana</string>
+    <string name="title_activity_display_hour_week">DisplayHourWeek</string>
+
+    <!-- DisplayOreSettimanali -->
+    <string name="title_ore_settimanali">Ore settimanali</string>
 </resources>

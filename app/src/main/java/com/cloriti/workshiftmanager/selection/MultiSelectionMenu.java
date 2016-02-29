@@ -10,8 +10,12 @@ import android.widget.Button;
 
 import com.cloriti.workshiftmanager.R;
 import com.cloriti.workshiftmanager.WorkShiftManagerSetting;
+import com.cloriti.workshiftmanager.display.DisplaySettimana;
 import com.cloriti.workshiftmanager.display.DisplayWorkShift;
+import com.cloriti.workshiftmanager.display.DisplayYear;
+import com.cloriti.workshiftmanager.manage.AddOvertime;
 import com.cloriti.workshiftmanager.manage.ManageWorkShift;
+import com.cloriti.workshiftmanager.manage.StarlingHours;
 
 public class MultiSelectionMenu extends AppCompatActivity {
 
@@ -35,7 +39,7 @@ public class MultiSelectionMenu extends AppCompatActivity {
         Button back = (Button) findViewById(R.id.backbutton);
         Button displayMounth = (Button) findViewById(R.id.displayH);
         Button displayYear = (Button) findViewById(R.id.displayY);
-        Button displayOreSettimali=(Button) findViewById(R.id.oreSettimanali);
+        Button displayOreSettimali = (Button) findViewById(R.id.oreSettimanali);
         Button starlingHour = (Button) findViewById(R.id.storno);
         Button setting = (Button) findViewById(R.id.setting);
 
@@ -108,7 +112,7 @@ public class MultiSelectionMenu extends AppCompatActivity {
         });
 
         //TODO:
-        displayOreSettimali.setOnClickListener( new View.OnClickListener() {
+        displayOreSettimali.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -119,6 +123,6 @@ public class MultiSelectionMenu extends AppCompatActivity {
 
 
     }
-    }
-
 }
+
+

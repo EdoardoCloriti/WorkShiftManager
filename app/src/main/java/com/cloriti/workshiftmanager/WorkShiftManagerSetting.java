@@ -10,7 +10,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.cloriti.workshiftmanager.com.orion.workshiftmanager.util.notification.WorkShiftCounterAlarmService;
 import com.cloriti.workshiftmanager.selection.MultiSelectionMenu;
 import com.cloriti.workshiftmanager.util.Property;
 import com.cloriti.workshiftmanager.util.db.AccessToDB;

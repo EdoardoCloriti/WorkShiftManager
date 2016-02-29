@@ -45,6 +45,34 @@
         <activity
             android:name=".display.DisplayTurn"
             android:label="@string/title_activity_display_turn"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".manage.AddOvertime"
+            android:label="@string/title_activity_add_overtime"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".manage.SelectOvertime"
+            android:label="@string/title_activity_select_overtime"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".manage.StarlingHours"
+            android:label="@string/title_activity_starling_hours"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".display.DisplayYear"
+            android:label="@string/title_activity_display_year"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".selection.MounthSelection"
+            android:label="@string/title_activity_mounth_selection"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".display.DisplaySettimana"
+            android:label="@string/title_activity_display_settimana"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".display.DisplayHourWeek"
+            android:label="@string/title_activity_display_hour_week"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
