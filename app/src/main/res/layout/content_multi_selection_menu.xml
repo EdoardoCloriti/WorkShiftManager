@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/background"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.cloriti.workshiftmanager.com.cloriti.workshiftmanager.manage.MultiSelectionMenu"
+    tools:showIn="@layout/activity_multi_selection_menu">
+
+    <Button
+        android:id="@+id/insertT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/manageTurn"
+        android:layout_alignParentLeft="true" />
+
+    <Button
+        android:id="@+id/visualTurn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/insertT"
+        android:layout_alignRight="@+id/insertT"
+        android:layout_below="@+id/insertT"
+        android:text="@string/visualTurn" />
+
+    <Button
+        android:id="@+id/displayY"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/displayY"
+        android:layout_below="@+id/displayH"
+        android:layout_alignRight="@+id/displayH"
+        android:layout_alignParentLeft="true" />
+
+    <Button
+        android:id="@+id/displayH"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/displayH"
+        android:layout_below="@+id/oreSettimanali"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true" />
+
+    <Button
+        android:id="@+id/storno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/addextraordinary"
+        android:layout_alignRight="@+id/addextraordinary"
+        android:layout_below="@+id/addextraordinary"
+        android:text="@string/starling" />
+
+    <Button
+        android:id="@+id/addextraordinary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/visualTurn"
+        android:layout_alignRight="@+id/visualTurn"
+        android:layout_below="@+id/visualTurn"
+        android:text="@string/addExtraordinary" />
+
+    <Button
+        android:id="@+id/setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/backbutton"
+        android:layout_alignLeft="@+id/backbutton"
+        android:layout_alignRight="@+id/backbutton"
+        android:text="@string/settingbutton" />
+
+    <Button
+        android:id="@+id/backbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/back_upper" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/visualSettimana"
+        android:id="@+id/oreSettimanali"
+        android:layout_below="@+id/storno"
+        android:layout_alignRight="@+id/storno"
+        android:layout_alignParentLeft="true" />
+
+</RelativeLayout>

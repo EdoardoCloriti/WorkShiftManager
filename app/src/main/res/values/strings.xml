@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">WorkShiftManager</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- String Activity WorkshiftManager-->
+    <string name="title_app_upper">CONTA ORE</string>
+
+    <!-- String Utility-->
+    <string name="back_upper">INDIETRO</string>
+    <string name="submit_upper">CONFERMA</string>
+    <string name="start_upper">ENTRA</string>
+    <string name="exit_upper">ESCI</string>
+    <string name="title_activity_work_shift_manager_setting">WorkShiftManagerSetting</string>
+    <string name="title_activity_multi_selection_menu">MultiSelectionMenu</string>
+
+    <!-- MultiSelectionMenu voice -->
+    <string name="manageTurn">Gestisci Turni</string>
+    <string name="visualTurn">Visualizza turni</string>
+    <string name="visualSettimana">Visualizza Ore Settimana</string>
+    <string name="displayH">Visualizza ore mensili</string>
+    <string name="displayY">Visualizza ore annuali</string>
+    <string name="addExtraordinary">Aggiungi straordinari</string>
+    <string name="starling">Storno ore</string>
+    <string name="modifica_turni">Modifica turni</string>
+    <string name="settingbutton">Configurazione</string>
+
+    <!-- application setting voice -->
+    <string name="setting">IMPOSTAZIONI</string>
+    <string name="orecontratto">ORE</string>
+    <string name="allarm">Attivare Allarme prima del turno</string>
+    <string name="notifiche">Attivare Notifiche</string>
+</resources>
