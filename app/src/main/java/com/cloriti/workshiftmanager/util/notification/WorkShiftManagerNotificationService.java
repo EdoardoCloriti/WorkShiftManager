@@ -1,4 +1,4 @@
-package com.cloriti.workshiftmanager.com.orion.workshiftmanager.util.notification;
+package com.cloriti.workshiftmanager.util.notification;
 
 import android.app.NotificationManager;
 import android.content.Context;
@@ -7,8 +7,9 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
 
-import com.cloriti.workshiftmanager.com.cloriti.workshiftmanager.com.cloriti.workshiftmanager.util.Turn;
-import com.cloriti.workshiftmanager.com.cloriti.workshiftmanager.util.db.AccessToDB;
+import com.cloriti.workshiftmanager.R;
+import com.cloriti.workshiftmanager.util.Turn;
+import com.cloriti.workshiftmanager.util.db.AccessToDB;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,11 +19,11 @@ import java.util.Date;
 /**
  * Created by Edoardo on 22/02/2016.
  */
-public class WorkShiftCounterNotificationService extends WorkShiftCounterService {
+public class WorkShiftManagerNotificationService extends WorkShiftManagerService {
 
     private NotificationManager manager = null;
 
-    public WorkShiftCounterNotificationService(Context context) {
+    public WorkShiftManagerNotificationService(Context context) {
         setContext(context);
         setHourToNotify(1);
         this.manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
@@ -34,7 +35,7 @@ public class WorkShiftCounterNotificationService extends WorkShiftCounterService
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setContentTitle("Il tuo turno sta per cominciare");
         builder.setContentText("Il tuo Turno comincerà alle: " + turnoInizio + " e finirà alle: " + turnoFine);
-        builder.setSmallIcon(R.drawable.ic_launcher);
+        builder.setSmallIcon(R.mipmap.ic_launcher);
         builder.setSound(sound);
 
         manager.notify(0,builder.build());

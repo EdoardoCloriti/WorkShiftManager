@@ -1,4 +1,4 @@
-package com.cloriti.workshiftmanager.com.cloriti.workshiftmanager.com.cloriti.workshiftmanager.util;
+package com.cloriti.workshiftmanager.util;
 
 
 import android.content.Intent;

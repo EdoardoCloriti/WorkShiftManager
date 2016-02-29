@@ -1,11 +1,11 @@
-package com.cloriti.workshiftmanager.com.orion.workshiftmanager.util.notification;
+package com.cloriti.workshiftmanager.util.notification;
 
 import android.content.Context;
 import android.content.Intent;
 import android.provider.AlarmClock;
 
-import com.orion.workshiftmanager.util.Turn;
-import com.orion.workshiftmanager.util.db.AccessToDB;
+import com.cloriti.workshiftmanager.util.Turn;
+import com.cloriti.workshiftmanager.util.db.AccessToDB;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -13,9 +13,9 @@ import java.util.Calendar;
 /**
  * Created by Edoardo on 22/02/2016.
  */
-public class WorkShiftCounterAlarmService extends WorkShiftCounterService {
+public class WorkShiftManagerAlarmService extends WorkShiftManagerService {
 
-    public WorkShiftCounterAlarmService(Context context) {
+    public WorkShiftManagerAlarmService(Context context) {
         setHourToNotify(24);
         setContext(context);
     }

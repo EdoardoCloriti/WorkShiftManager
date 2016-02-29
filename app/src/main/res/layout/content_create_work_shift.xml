@@ -10,7 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@drawable/background"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.cloriti.workshiftmanager.com.cloriti.workshiftmanager.manage.CreateWorkShift"
+    tools:context=".manage.CreateWorkShift"
     tools:showIn="@layout/activity_create_work_shift">
 
 

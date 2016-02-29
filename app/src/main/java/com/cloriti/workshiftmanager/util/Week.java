@@ -1,7 +1,8 @@
-package com.cloriti.workshiftmanager.com.cloriti.workshiftmanager.com.cloriti.workshiftmanager.util;
+package com.cloriti.workshiftmanager.util;
 
 import android.content.Context;
 
+import com.cloriti.workshiftmanager.util.db.AccessToDB;
 import com.orion.workshiftmanager.util.db.AccessToDB;
 
 public class Week {

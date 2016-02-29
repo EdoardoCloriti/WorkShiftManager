@@ -2,8 +2,6 @@ package com.cloriti.workshiftmanager;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -12,11 +10,12 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.cloriti.workshiftmanager.com.cloriti.workshiftmanager.com.cloriti.workshiftmanager.util.Property;
-import com.cloriti.workshiftmanager.com.cloriti.workshiftmanager.manage.MultiSelectionMenu;
-import com.cloriti.workshiftmanager.com.cloriti.workshiftmanager.util.db.AccessToDB;
 import com.cloriti.workshiftmanager.com.orion.workshiftmanager.util.notification.WorkShiftCounterAlarmService;
-import com.cloriti.workshiftmanager.com.orion.workshiftmanager.util.notification.WorkShiftCounterNotificationService;
+import com.cloriti.workshiftmanager.selection.MultiSelectionMenu;
+import com.cloriti.workshiftmanager.util.Property;
+import com.cloriti.workshiftmanager.util.db.AccessToDB;
+import com.cloriti.workshiftmanager.util.notification.WorkShiftManagerAlarmService;
+import com.cloriti.workshiftmanager.util.notification.WorkShiftManagerNotificationService;
 
 import org.xml.sax.ErrorHandler;
 
@@ -137,11 +136,11 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
                 Property propertyOnDbdb = db.getProperty(Property.ALLARM, getApplicationContext());
                 if (!activeAllarm.getValue().equals(propertyOnDbdb.getValue())) {
                     db.insertProperty(activeAllarm, getApplicationContext());
-                    startService(new Intent(getApplicationContext(), WorkShiftCounterAlarmService.class));
+                    startService(new Intent(getApplicationContext(), WorkShiftManagerAlarmService.class));
                 }
             } else {
                 db.insertProperty(activeAllarm, getApplicationContext());
-                startService(new Intent(getApplicationContext(), WorkShiftCounterAlarmService.class));
+                startService(new Intent(getApplicationContext(), WorkShiftManagerAlarmService.class));
             }
         } else if (!allarm.isChecked()) {
             Property activeAllarm = new Property();
@@ -151,11 +150,11 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
                 Property propertyOnDbdb = db.getProperty(Property.ALLARM, getApplicationContext());
                 if (!activeAllarm.getValue().equals(propertyOnDbdb.getValue())) {
                     db.insertProperty(activeAllarm, getApplicationContext());
-                    stopService(new Intent(getApplicationContext(), WorkShiftCounterAlarmService.class));
+                    stopService(new Intent(getApplicationContext(), WorkShiftManagerAlarmService.class));
                 }
             } else {
                 db.insertProperty(activeAllarm, getApplicationContext());
-                stopService(new Intent(getApplicationContext(), WorkShiftCounterAlarmService.class));
+                stopService(new Intent(getApplicationContext(), WorkShiftManagerAlarmService.class));
             }
         }
     }
@@ -170,11 +169,11 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
                 Property propertyOnDbdb = db.getProperty(Property.NOTIFICA, getApplicationContext());
                 if (!activeNotify.getValue().equals(propertyOnDbdb.getValue())) {
                     db.insertProperty(activeNotify, getApplicationContext());
-                    startService(new Intent(getApplicationContext(), WorkShiftCounterNotificationService.class));
+                    startService(new Intent(getApplicationContext(), WorkShiftManagerNotificationService.class));
                 }
             } else {
                 db.insertProperty(activeNotify, getApplicationContext());
-                startService(new Intent(getApplicationContext(), WorkShiftCounterNotificationService.class));
+                startService(new Intent(getApplicationContext(), WorkShiftManagerNotificationService.class));
             }
         } else if (!notify.isChecked()) {
             Property activeNotify = new Property();
@@ -184,11 +183,11 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
                 Property propertyOnDbdb = db.getProperty(Property.NOTIFICA, getApplicationContext());
                 if (!activeNotify.getValue().equals(propertyOnDbdb.getValue())) {
                     db.insertProperty(activeNotify, getApplicationContext());
-                    stopService(new Intent(getApplicationContext(), WorkShiftCounterNotificationService.class));
+                    stopService(new Intent(getApplicationContext(), WorkShiftManagerNotificationService.class));
                 }
             } else {
                 db.insertProperty(activeNotify, getApplicationContext());
-                stopService(new Intent(getApplicationContext(), WorkShiftCounterAlarmService.class));
+                stopService(new Intent(getApplicationContext(), WorkShiftManagerAlarmService.class));
             }
         }
     }

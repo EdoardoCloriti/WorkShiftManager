@@ -3,8 +3,6 @@ package com.cloriti.workshiftmanager;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -13,9 +11,9 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.cloriti.workshiftmanager.com.cloriti.workshiftmanager.com.cloriti.workshiftmanager.util.Property;
-import com.cloriti.workshiftmanager.com.cloriti.workshiftmanager.manage.MultiSelectionMenu;
-import com.cloriti.workshiftmanager.com.cloriti.workshiftmanager.util.db.AccessToDB;
+import com.cloriti.workshiftmanager.selection.MultiSelectionMenu;
+import com.cloriti.workshiftmanager.util.Property;
+import com.cloriti.workshiftmanager.util.db.AccessToDB;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
