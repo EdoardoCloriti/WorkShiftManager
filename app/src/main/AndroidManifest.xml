@@ -37,6 +37,14 @@
         <activity
             android:name=".util.SelectHours"
             android:label="@string/title_activity_select_hours"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".display.DisplayWorkShift"
+            android:label="@string/title_activity_display_work_shift"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".display.DisplayTurn"
+            android:label="@string/title_activity_display_turn"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

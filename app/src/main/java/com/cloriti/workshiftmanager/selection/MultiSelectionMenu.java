@@ -10,9 +10,12 @@ import android.widget.Button;
 
 import com.cloriti.workshiftmanager.R;
 import com.cloriti.workshiftmanager.WorkShiftManagerSetting;
+import com.cloriti.workshiftmanager.display.DisplayWorkShift;
 import com.cloriti.workshiftmanager.manage.ManageWorkShift;
 
 public class MultiSelectionMenu extends AppCompatActivity {
+
+    private static final int MONDAY = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
