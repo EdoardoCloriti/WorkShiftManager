@@ -27,7 +27,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 public class AddOvertime extends AppCompatActivity {
-    Dialog d;
+    private Dialog d;
     private static final int MONDAY = 1;
     private Turn turn = null;
     private List<Turn> turns = null;
