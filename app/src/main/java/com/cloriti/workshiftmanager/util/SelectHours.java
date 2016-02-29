@@ -61,10 +61,10 @@ public class SelectHours extends AppCompatActivity {
             public void onClick(View v) {
                 TimePicker orarioInizio = (TimePicker) findViewById(R.id.inizio);
                 TimePicker orarioFine = (TimePicker) findViewById(R.id.fine);
-                Integer hourStart = orarioInizio.getCurrentHour();
-                Integer minuteStart = orarioInizio.getCurrentMinute();
-                Integer hourFinish = orarioFine.getCurrentHour();
-                Integer minuteFinish = orarioFine.getCurrentMinute();
+                Integer hourStart = orarioInizio.getHour();
+                Integer minuteStart = orarioInizio.getMinute();
+                Integer hourFinish = orarioFine.getHour();
+                Integer minuteFinish = orarioFine.getMinute();
                 outputIntent.putExtra(IDs.PART_OF_DAY, h);
                 if ("am".equalsIgnoreCase(h))
                     outputIntent.putExtra(IDs.ORARIO_MATTINA, manageAM(hourStart, minuteStart, hourFinish, minuteFinish));

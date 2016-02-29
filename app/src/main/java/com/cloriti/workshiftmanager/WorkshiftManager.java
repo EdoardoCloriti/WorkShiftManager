@@ -37,7 +37,6 @@ public class WorkshiftManager extends AppCompatActivity {
         Button exitButton = (Button) findViewById(R.id.exitbutton);
         // creazione del button di ingresso dell'appicazione
         Button startButton = (Button) findViewById(R.id.startbutton);
-        super.onCreate(savedInstanceState);
 
         Calendar sysCalendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat(PATTERN);
