@@ -13,12 +13,7 @@ import android.widget.EditText;
 import com.cloriti.workshiftmanager.R;
 import com.cloriti.workshiftmanager.WorkShiftManagerSetting;
 import com.cloriti.workshiftmanager.display.DisplayMounth;
-import com.cloriti.workshiftmanager.display.DisplaySettimana;
-import com.cloriti.workshiftmanager.display.DisplayWorkShift;
 import com.cloriti.workshiftmanager.display.DisplayYear;
-import com.cloriti.workshiftmanager.manage.AddOvertime;
-import com.cloriti.workshiftmanager.manage.ManageWorkShift;
-import com.cloriti.workshiftmanager.manage.StarlingHours;
 
 public class MultiSelectionMenu extends AppCompatActivity {
 
@@ -52,7 +47,9 @@ public class MultiSelectionMenu extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), ManageWorkShift.class);
+                Intent i = new Intent(getApplicationContext(), ManageCalendar.class);
+                i.putExtra("USE_CASE", "ManageWorkShift");
+                //Intent i = new Intent(getApplicationContext(), ManageWorkShift.class);
                 startActivity(i);
             }
         });
@@ -70,7 +67,9 @@ public class MultiSelectionMenu extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), DisplayWorkShift.class);
+                Intent i = new Intent(getApplicationContext(), ManageCalendar.class);
+                i.putExtra("USE_CASE", "DisplayWorkShift");
+                //Intent i = new Intent(getApplicationContext(), DisplayWorkShift.class);
                 startActivity(i);
             }
         });
@@ -79,7 +78,9 @@ public class MultiSelectionMenu extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), AddOvertime.class);
+                Intent i = new Intent(getApplicationContext(), ManageCalendar.class);
+                i.putExtra("USE_CASE", "AddOvertime");
+                //Intent i = new Intent(getApplicationContext(), AddOvertime.class);
                 startActivity(i);
             }
         });
@@ -87,7 +88,9 @@ public class MultiSelectionMenu extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), StarlingHours.class);
+                Intent i = new Intent(getApplicationContext(), ManageCalendar.class);
+                i.putExtra("USE_CASE", "StarlingHours");
+                //Intent i = new Intent(getApplicationContext(), StarlingHours.class);
                 startActivity(i);
             }
         });
@@ -144,12 +147,13 @@ public class MultiSelectionMenu extends AppCompatActivity {
             }
         });
 
-        //TODO:
         displayOreSettimali.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), DisplaySettimana.class);
+                Intent i = new Intent(getApplicationContext(), ManageCalendar.class);
+                i.putExtra("USE_CASE", "DisplaySettimana");
+                //Intent i = new Intent(getApplicationContext(), DisplaySettimana.class);
                 startActivity(i);
             }
         });

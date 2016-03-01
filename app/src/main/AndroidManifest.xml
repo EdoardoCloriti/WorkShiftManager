@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
@@ -37,10 +36,6 @@
             android:label="@string/title_activity_multi_selection_menu"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".manage.ManageWorkShift"
-            android:label="@string/title_activity_manage_work_shift"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".manage.CreateWorkShift"
             android:label="@string/title_activity_create_work_shift"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -49,36 +44,12 @@
             android:label="@string/title_activity_select_hours"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".display.DisplayWorkShift"
-            android:label="@string/title_activity_display_work_shift"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".display.DisplayTurn"
             android:label="@string/title_activity_display_turn"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".manage.AddOvertime"
-            android:label="@string/title_activity_add_overtime"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".manage.SelectOvertime"
-            android:label="@string/title_activity_select_overtime"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".manage.StarlingHours"
-            android:label="@string/title_activity_starling_hours"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".display.DisplayYear"
             android:label="@string/title_activity_display_year"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".selection.MounthSelection"
-            android:label="@string/title_activity_mounth_selection"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".display.DisplaySettimana"
-            android:label="@string/title_activity_display_settimana"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".display.DisplayHourWeek"
@@ -87,9 +58,14 @@
         <activity
             android:name=".display.DisplayMounth"
             android:label="@string/title_activity_display_mounth"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <receiver android:name=".WorkShiftManagerReceiver" />
+
+        <activity
+            android:name=".selection.ManageCalendar"
+            android:label="@string/title_activity_manage_calendar"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
