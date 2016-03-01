@@ -41,24 +41,6 @@
             <requestFocus />
         </EditText>
 
-        <Button
-            android:id="@+id/back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/submit"
-            android:layout_alignParentBottom="true"
-            android:layout_alignRight="@+id/submit"
-            android:layout_marginBottom="16dp"
-            android:text="@string/back_upper" />
-
-        <Button
-            android:id="@+id/submit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/back"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:text="@string/submit_upper" />
 
         <TextView
             android:id="@+id/titlenbh"
@@ -88,6 +70,31 @@
             android:layout_below="@+id/activeAllarm"
             android:checked="false"
             android:text="@string/notifiche" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/notify"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/back"
+                android:layout_width="364dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:text="@string/back_upper" />
+
+            <Button
+                android:id="@+id/submit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/back"
+                android:layout_alignParentStart="true"
+                android:text="@string/submit_upper" />
+        </LinearLayout>
+
     </RelativeLayout>
+
 </ScrollView>
 

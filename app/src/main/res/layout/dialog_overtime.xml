@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:background="@color/colorAccent"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:background="@color/Gainsboro"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/title"
@@ -18,56 +18,56 @@
         android:id="@+id/orestr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/ore"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_marginEnd="33dp"
         android:layout_below="@+id/title"
-        android:layout_toStartOf="@+id/title" />
+        android:layout_marginEnd="33dp"
+        android:layout_toStartOf="@+id/title"
+        android:text="@string/ore"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
         android:id="@+id/ore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/orestr"
         android:layout_below="@+id/orestr"
         android:layout_marginTop="15dp"
         android:layout_toLeftOf="@+id/title"
         android:ems="10"
-        android:inputType="time"
-        android:layout_alignStart="@+id/orestr" />
+        android:inputType="time" />
 
     <TextView
         android:id="@+id/minutistr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/minuti"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_alignTop="@+id/orestr"
-        android:layout_toEndOf="@+id/title" />
+        android:layout_toEndOf="@+id/title"
+        android:text="@string/minuti"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
         android:id="@+id/minuti"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/minutistr"
         android:layout_alignTop="@+id/ore"
         android:layout_toRightOf="@+id/title"
         android:ems="10"
-        android:inputType="time"
-        android:layout_alignEnd="@+id/minutistr" />
+        android:inputType="time" />
 
     <Button
+        android:id="@+id/submit_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/submit_upper"
-        android:id="@+id/submit_dialog" />
+        android:text="@string/submit_upper" />
 
     <Button
         android:id="@+id/back_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/back_upper"
-        android:layout_below="@+id/ore"
-        android:layout_alignStart="@+id/ore"
         android:layout_alignEnd="@+id/minuti"
-        android:layout_gravity="center_horizontal" />
+        android:layout_alignStart="@+id/ore"
+        android:layout_below="@+id/ore"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/back_upper" />
 
 </LinearLayout>

@@ -1,13 +1,17 @@
 package com.cloriti.workshiftmanager;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -22,6 +26,8 @@ import java.util.Date;
 public class WorkshiftManager extends AppCompatActivity {
 
     private final static String PATTERN = "dd/MM/yyyy";
+    private PendingIntent pendingIntent;
+    private AlarmManager alarmManager;
     private String CLEANING_DATE = "16/02/";
 
     @Override
@@ -55,7 +61,33 @@ public class WorkshiftManager extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "Impossibile Effettuare la  pulizia annuale di turni", Toast.LENGTH_LONG).show();
         }
+        AccessToDB db = new AccessToDB();
+        if (db.existPropery(Property.NOTIFICA, getApplicationContext()) != 0) {
+            // Set the alarm to start at approximately 2:00 p.m.
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            int curHr = calendar.get(Calendar.HOUR_OF_DAY);
 
+            // Checking whether current hour is over 14
+            if (curHr >= 2) {
+                // Since current hour is over 14, setting the date to the next day
+                calendar.add(Calendar.DATE, 1);
+            }
+            Log.v("ADebugTag", "It work! - INIT");
+            calendar.set(Calendar.HOUR_OF_DAY, 1);
+            calendar.set(Calendar.MINUTE, 5);
+            // Schedule alarm manager
+
+            Intent myIntent = new Intent(WorkshiftManager.this, WorkshiftManager.class);
+            pendingIntent = PendingIntent.getBroadcast(WorkshiftManager.this, 0, myIntent, 0);
+
+            alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+
+            // With setInexactRepeating(), you have to use one of the AlarmManager interval
+            // constants--in this case, AlarmManager.INTERVAL_DAY.
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, calendar.getTimeInMillis(), AlarmManager.ELAPSED_REALTIME, pendingIntent);
+
+        }
 
         startButton.setOnClickListener(new View.OnClickListener() {
 
