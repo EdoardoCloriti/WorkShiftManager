@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.cloriti.workshiftmanager.selection.MultiSelectionMenu;
 import com.cloriti.workshiftmanager.util.Property;
 import com.cloriti.workshiftmanager.util.db.AccessToDB;
+import com.cloriti.workshiftmanager.util.tutorial.WorkshiftManagerTutorial;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -105,8 +106,8 @@ public class WorkshiftManager extends AppCompatActivity {
                 android.os.Process.killProcess(android.os.Process.myPid());
             }
         });
-        //if (WorkshiftManagerTutorial.isTutorialReq(getApplicationContext(), getLocalClassName()))
-        //  WorkshiftManagerTutorial.showWorkShiftManagerTurorial(getApplicationContext(), WorkshiftManagerTutorial.WORK_SHIFT_MANAGER);
+        /*if (WorkshiftManagerTutorial.isTutorialReq(WorkshiftManager.this, getLocalClassName()))
+            WorkshiftManagerTutorial.showWorkShiftManagerTurorial(WorkshiftManager.this, WorkshiftManagerTutorial.WORK_SHIFT_MANAGER);*/
     }
 
     @Override
@@ -125,8 +126,13 @@ public class WorkshiftManager extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent i = new Intent(getApplicationContext(), WorkShiftManagerSetting.class);
+            startActivity(i);
         }
+        if (id == R.id.action_help) {
+            WorkshiftManagerTutorial.showWorkShiftManagerTurorial(WorkshiftManager.this, "WorkShiftManager");
+        }
+
 
         return super.onOptionsItemSelected(item);
     }

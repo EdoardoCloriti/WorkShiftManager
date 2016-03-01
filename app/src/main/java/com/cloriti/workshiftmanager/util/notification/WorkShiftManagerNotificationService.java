@@ -6,7 +6,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
-
 import com.cloriti.workshiftmanager.R;
 import com.cloriti.workshiftmanager.util.Turn;
 import com.cloriti.workshiftmanager.util.db.AccessToDB;
@@ -38,7 +37,7 @@ public class WorkShiftManagerNotificationService extends WorkShiftManagerService
         builder.setSmallIcon(R.mipmap.ic_launcher);
         builder.setSound(sound);
 
-        manager.notify(0,builder.build());
+        manager.notify(0, builder.build());
     }
 
     @Override

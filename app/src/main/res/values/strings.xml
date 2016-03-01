@@ -12,6 +12,7 @@
     <string name="exit_upper">ESCI</string>
     <string name="title_activity_work_shift_manager_setting">WorkShiftManagerSetting</string>
     <string name="title_activity_multi_selection_menu">MultiSelectionMenu</string>
+    <string name="help">Aiuto</string>
 
     <!-- MultiSelectionMenu voice -->
     <string name="manageTurn">Gestisci Turni</string>
@@ -106,4 +107,18 @@
     <!-- DisplayOreSettimanali -->
     <string name="title_ore_settimanali">Ore settimanali</string>
     <string name="title_activity_display_mounth">DisplayMounth</string>
+
+    <!-- Tutorial -->
+    <string name="tutorial_title">Tutorial</string>
+    <string name="tutorial_WorkShfitManager">Benvenuto in WorkShiftManager, l\'applicazione che ti consente di gestire i tuoi turni di lavorotreamite l\'applicazione potrai inserire i turni, visualizzarli, tenere traccia delle ore settimanali, aggiungere e rimuovere straordinari, ricevere un Alert prima dell\'inizio del turno e sincronizzare i turni inseriti con i tuoi calendari di Google</string>
+    <string name="tutorial_WorkShfitManager_setting">prova tutorial</string>
+    <string name="tutorial_MultiSelectionMenu">prova tutorial</string>
+    <string name="tutorial_ManageWorkshift">prova tutorial</string>
+    <string name="tutorial_AddOvertime">prova tutorial</string>
+    <string name="tutorial_StarlingHour">prova tutorial</string>
+    <string name="tutorial_not_disponible">Tutorial non ancora disponibile</string>
+    <string name="title_activity_work_shift_manager_calendar_selection">
+    </string>
+    <string name="title_activity_manage_calendar">ManageCalendar</string>
+
 </resources>

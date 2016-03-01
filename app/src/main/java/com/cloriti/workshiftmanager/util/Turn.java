@@ -57,14 +57,6 @@ public class Turn {
         return turn;
     }
 
-    public boolean isNull()
-    {
-        if(this.datariferimento==null)
-            return true;
-        else
-            return false;
-    }
-
     public static boolean intervalIsNotNull(String interval) {
         return interval == null || "null:null".equals(interval) ? false : true;
     }
@@ -83,6 +75,13 @@ public class Turn {
         i.putExtra(IDs.OVERTIME, turn.getOvertime());
         i.putExtra(IDs.PRIORITY, turn.getIsImportante() ? 1 : 0);
         return i;
+    }
+
+    public boolean isNull() {
+        if (this.datariferimento == null)
+            return true;
+        else
+            return false;
     }
 
     // setter

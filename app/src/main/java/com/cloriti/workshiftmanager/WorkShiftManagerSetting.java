@@ -1,21 +1,24 @@
 package com.cloriti.workshiftmanager;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cloriti.workshiftmanager.selection.MultiSelectionMenu;
 import com.cloriti.workshiftmanager.util.Property;
 import com.cloriti.workshiftmanager.util.db.AccessToDB;
 import com.cloriti.workshiftmanager.util.notification.WorkShiftManagerAlarmService;
 import com.cloriti.workshiftmanager.util.notification.WorkShiftManagerNotificationService;
+import com.cloriti.workshiftmanager.util.tutorial.WorkshiftManagerTutorial;
 
 import org.xml.sax.ErrorHandler;
 
@@ -95,10 +98,9 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
 
     private void setStateOre(AccessToDB db) {
         EditText oreContratto = (EditText) findViewById(R.id.ore);
-        if(db.existPropery( Property.ORESETTIMANALI,getApplicationContext())!=0)
-        {
-            Property ore=db.getProperty(Property.ORESETTIMANALI,getApplicationContext());
-            CharSequence str=ore.getValue();
+        if (db.existPropery(Property.ORESETTIMANALI, getApplicationContext()) != 0) {
+            Property ore = db.getProperty(Property.ORESETTIMANALI, getApplicationContext());
+            CharSequence str = ore.getValue();
             oreContratto.setText(str, TextView.BufferType.EDITABLE);
         }
     }
@@ -192,4 +194,29 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_workshift_manager, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            Toast.makeText(getApplicationContext(), "Non Disponibile da rimuovere!", Toast.LENGTH_SHORT).show();
+        }
+        if (id == R.id.action_help) {
+            WorkshiftManagerTutorial.showWorkShiftManagerTurorial(WorkShiftManagerSetting.this, "WorkShiftManagerSetting");
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
 }
