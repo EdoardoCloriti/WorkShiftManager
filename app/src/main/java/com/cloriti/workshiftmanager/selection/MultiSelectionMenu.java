@@ -8,9 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.cloriti.workshiftmanager.R;
 import com.cloriti.workshiftmanager.WorkShiftManagerSetting;
+import com.cloriti.workshiftmanager.display.DisplayMounth;
 import com.cloriti.workshiftmanager.display.DisplaySettimana;
 import com.cloriti.workshiftmanager.display.DisplayWorkShift;
 import com.cloriti.workshiftmanager.display.DisplayYear;
@@ -21,6 +23,7 @@ import com.cloriti.workshiftmanager.manage.StarlingHours;
 public class MultiSelectionMenu extends AppCompatActivity {
 
     private static final int MONDAY = 1;
+    private Dialog d;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,8 +104,36 @@ public class MultiSelectionMenu extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), MounthSelection.class);
-                startActivity(i);
+                d = new Dialog(MultiSelectionMenu.this);
+                d.setTitle("Prova");
+                d.setContentView(R.layout.dialog_select_mounth);
+                d.show();
+                Button submit = (Button) d.findViewById(R.id.submit_dialog);
+                Button back = (Button) d.findViewById(R.id.back_dialog);
+                submit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        EditText mese = (EditText) d.findViewById(R.id.mese);
+                        EditText anno = (EditText) d.findViewById(R.id.anno);
+                        int month = Integer.parseInt(mese.getText().toString());
+                        int year = Integer.parseInt(anno.getText().toString());
+                        Intent display = new Intent(getApplicationContext(), DisplayMounth.class);
+                        display.putExtra("MONTH", month);
+                        display.putExtra("YEAR", year);
+                        startActivity(display);
+                        d.dismiss();
+                    }
+                });
+
+                back.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Close dialog
+                        d.dismiss();
+                    }
+                });
+                //Intent i = new Intent(getApplicationContext(), MounthSelection.class);
+                //startActivity(i);
             }
         });
         setting.setOnClickListener(new View.OnClickListener() {
