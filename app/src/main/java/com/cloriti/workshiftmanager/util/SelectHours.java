@@ -10,9 +10,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.cloriti.workshiftmanager.R;
 import com.cloriti.workshiftmanager.manage.CreateWorkShift;
+
+import java.util.Calendar;
 
 public class SelectHours extends AppCompatActivity {
 
@@ -66,50 +69,18 @@ public class SelectHours extends AppCompatActivity {
                 Integer hourFinish = orarioFine.getHour();
                 Integer minuteFinish = orarioFine.getMinute();
                 outputIntent.putExtra(IDs.PART_OF_DAY, h);
-                if ("am".equalsIgnoreCase(h))
-                    outputIntent.putExtra(IDs.ORARIO_MATTINA, manageAM(hourStart, minuteStart, hourFinish, minuteFinish));
-                else if ("pm".equalsIgnoreCase(h))
-                    outputIntent.putExtra(IDs.ORARIO_POMERIGGIO, managePM(hourStart, minuteStart, hourFinish, minuteFinish));
-                setResult(2, outputIntent);
-                finish();
-            }
-
-            /*
-             * Metodo per la gestione dell'orario del turno caso 'AM'
-             */
-            private String manageAM(Integer hourStart, Integer minuteStart, Integer hourFinish, Integer minuteFinish) {
-                String result = null;
-                if (!verifyInitHour("am", hourStart)) {
-                    allert("am");
-                } else {
-                    result = hourStart + ":" + minuteStart;
-                }
-
-                if (!verifyFinishHour("am", hourFinish)) {
-                    allert("am");
-                } else {
-                    result = result + "-" + hourFinish + ":" + minuteFinish;
-                }
-                return result;
-            }
-
-            /*
-             * Metodo per la gestione dell'orario del turno caso 'PM'
-             */
-            private String managePM(Integer hourStart, Integer minuteStart, Integer hourFinish, Integer minuteFinish) {
-                String result = null;
-                if (!verifyInitHour("pm", hourStart)) {
-                    allert("pm");
-                } else {
-                    result = (hourStart + ":" + minuteStart);
-                }
-
-                if (!verifyFinishHour("pm", hourFinish)) {
-                    allert("pm");
-                } else {
-                    result = result + "-" + (hourFinish + ":" + minuteFinish);
-                }
-                return result;
+                String am = manageAM(hourStart, minuteStart, hourFinish, minuteFinish);
+                String pm = managePM(hourStart, minuteStart, hourFinish, minuteFinish);
+                if ("am".equalsIgnoreCase(h) && am != null) {
+                    outputIntent.putExtra(IDs.ORARIO_MATTINA, am);
+                    setResult(2, outputIntent);
+                    finish();
+                } else if ("pm".equalsIgnoreCase(h) && pm != null) {
+                    outputIntent.putExtra(IDs.ORARIO_POMERIGGIO, pm);
+                    setResult(2, outputIntent);
+                    finish();
+                } else
+                    alert();
             }
         });
         back.setOnClickListener(new View.OnClickListener() {
@@ -119,37 +90,67 @@ public class SelectHours extends AppCompatActivity {
                 finish();
             }
         });
-        /*importante.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    outputIntent.putExtra(IDs.PRIORITY, 1);
-                } else {
-                    outputIntent.putExtra(IDs.PRIORITY, 0);
-                }
-            }
-        });*/
     }
 
-    private void allert(String orario) {
-        String message = null;
-        if ("am".equalsIgnoreCase(orario))
-            message = getString(R.string.msg_orario_inizio_non_corretto_am);
-        else if ("pm".equalsIgnoreCase(orario))
-            message = getString(R.string.msg_orario_inizio_non_corretto_pm);
+    /*
+      * Metodo per la gestione dell'orario del turno caso 'AM'
+      */
+    private String manageAM(Integer hourStart, Integer minuteStart, Integer hourFinish, Integer minuteFinish) {
+        String result = null;
+        if (!validatTimetable(hourStart, minuteStart, hourFinish, minuteFinish)) {
+            return null;
+        } else {
+            result = (hourStart + ":" + minuteStart);
+            result = result + "-" + (hourFinish + ":" + minuteFinish);
+        }
+        return result;
+    }
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getApplicationContext());
-        alertDialogBuilder.setTitle(getString(R.string.msg_orario_non_corretto));
-        alertDialogBuilder.setMessage(message);
-        alertDialogBuilder.setPositiveButton(getString(R.string.msg_ok), new DialogInterface.OnClickListener() {
+    /*
+     * Metodo per la gestione dell'orario del turno caso 'PM'
+     */
+    private String managePM(Integer hourStart, Integer minuteStart, Integer hourFinish, Integer minuteFinish) {
+        String result = null;
+        if (!validatTimetable(hourStart, minuteStart, hourFinish, minuteFinish)) {
+            return null;
+        } else {
+            result = (hourStart + ":" + minuteStart);
+            result = result + "-" + (hourFinish + ":" + minuteFinish);
+        }
+        return result;
+    }
 
+    private void alertTost() {
+        Toast.makeText(this, "Orario inserito non valido si prega di ricompilare", Toast.LENGTH_LONG).show();
+    }
+
+    private void alert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(SelectHours.this);
+        builder.setTitle(this.getString(R.string.title_activity_select_hours));
+        builder.setMessage("Orario inserito non valido si prega di ricompilare");
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setPositiveButton(this.getString(R.string.msg_ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        AlertDialog d = builder.create();
+        d.show();
+    }
+
+    private boolean validatTimetable(int oraI, int minI, int oraf, int minF) {
+        Calendar init = Calendar.getInstance();
+        init.set(Calendar.HOUR, oraI);
+        init.set(Calendar.MINUTE, minI);
+
+        Calendar finish = Calendar.getInstance();
+        finish.set(Calendar.HOUR, oraf);
+        finish.set(Calendar.MINUTE, minF);
+        if (finish.before(init) || finish.equals(init))
+            return false;
+        else
+            return true;
     }
 
     private boolean verifyInitHour(String orario, int hour) {
