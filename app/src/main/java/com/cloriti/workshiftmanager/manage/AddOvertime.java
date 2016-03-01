@@ -4,10 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -17,20 +14,16 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.cloriti.workshiftmanager.R;
-import com.cloriti.workshiftmanager.util.IDs;
 import com.cloriti.workshiftmanager.util.Turn;
 import com.cloriti.workshiftmanager.util.db.AccessToDB;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 public class AddOvertime extends AppCompatActivity {
-    private Dialog d;
     private static final int MONDAY = 1;
+    private Dialog d;
     private Turn turn = null;
-    private List<Turn> turns = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +33,9 @@ public class AddOvertime extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         CalendarView calendar = (CalendarView) findViewById(R.id.calendar);
-        Button submit = (Button) findViewById(R.id.submit);
         Button back = (Button) findViewById(R.id.back);
 
         setCalendar(calendar);
-        turns = new ArrayList<Turn>();
 
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
@@ -55,25 +46,10 @@ public class AddOvertime extends AppCompatActivity {
                 SimpleDateFormat sdf = new SimpleDateFormat(Turn.PATTERN);
                 String selectedDay = new String(sdf.format(day.getTime()));
                 Toast.makeText(getApplicationContext(), selectedDay, Toast.LENGTH_SHORT).show();
-
-                Button submit = (Button) findViewById(R.id.submit_dialog);
-                Button back = (Button) findViewById(R.id.back_dialog);
                 createDialog(selectedDay);
             }
 
         });
-
-        submit.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                AccessToDB access = new AccessToDB();
-                int n = access.insertTurns(turns, getApplicationContext());
-                turns = null;
-                finish();
-            }
-        });
-
 
         back.setOnClickListener(new View.OnClickListener() {
 
@@ -87,7 +63,7 @@ public class AddOvertime extends AppCompatActivity {
     }
 
     private void createDialog(String selectedDate) {
-        AccessToDB db = new AccessToDB();
+        final AccessToDB db = new AccessToDB();
         turn = db.getTurnBySelectedDay(selectedDate, getApplicationContext());
         if(turn.isNull()) {
             turn = new Turn();
@@ -111,7 +87,7 @@ public class AddOvertime extends AppCompatActivity {
                 double overtime = min + hours;
                 overtime = turn.getOvertime() + overtime;
                 turn.setOvertime(overtime);
-                turns.add(turn);
+                db.insertTurn(turn, getApplicationContext());
                 d.dismiss();
             }
         });
@@ -175,21 +151,6 @@ public class AddOvertime extends AppCompatActivity {
         });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
-    }
-
-    protected void onActivityResult(int arg0, int arg1, Intent arg2) {
-        Bundle bundle = arg2.getExtras();
-        if (!bundle.containsKey("back")) {
-            String referencesDate = null;
-            if (bundle.containsKey(IDs.DATA))
-                referencesDate = bundle.getString(IDs.DATA);
-            double overtime = bundle.getDouble(IDs.OVERTIME);
-            AccessToDB db = new AccessToDB();
-            Turn turn = db.getTurnBySelectedDay(referencesDate, getApplicationContext());
-            overtime = overtime + turn.getOvertime();
-            turn.setOvertime(overtime);
-            turns.add(turn);
-        }
     }
 
     private int getInteger(String str) {
