@@ -76,8 +76,8 @@ public class WorkshiftManager extends AppCompatActivity {
                 // Since current hour is over 15, setting the date to the next day
                 calendar.add(Calendar.DATE, 1);
             }
-            calendar.set(Calendar.HOUR_OF_DAY, 15);
-            calendar.set(Calendar.MINUTE, 30);
+            calendar.set(Calendar.HOUR_OF_DAY, 14);
+            calendar.set(Calendar.MINUTE, 01);
             // every day
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         }
