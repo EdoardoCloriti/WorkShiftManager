@@ -32,7 +32,6 @@ public class DisplayTurn extends AppCompatActivity {
         String selectedDay = inputBundle.getString("SELECTED_DAY");
         AccessToDB db = new AccessToDB();
         turn = db.getTurnBySelectedDay(selectedDay, getApplicationContext());
-        setContentView(R.layout.activity_display_turn);
 
         TextView title = (TextView) findViewById(R.id.title);
 

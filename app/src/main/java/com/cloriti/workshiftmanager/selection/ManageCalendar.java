@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
@@ -14,12 +16,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.cloriti.workshiftmanager.R;
+import com.cloriti.workshiftmanager.WorkShiftManagerSetting;
 import com.cloriti.workshiftmanager.display.DisplayHourWeek;
 import com.cloriti.workshiftmanager.display.DisplayTurn;
 import com.cloriti.workshiftmanager.manage.CreateWorkShift;
 import com.cloriti.workshiftmanager.util.IDs;
 import com.cloriti.workshiftmanager.util.Turn;
 import com.cloriti.workshiftmanager.util.db.AccessToDB;
+import com.cloriti.workshiftmanager.util.tutorial.WorkshiftManagerTutorial;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -264,6 +268,33 @@ public class ManageCalendar extends AppCompatActivity {
         } catch (Throwable t) {
             return 0;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_workshift_manager, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            Intent i = new Intent(getApplicationContext(), WorkShiftManagerSetting.class);
+            startActivity(i);
+        }
+        if (id == R.id.action_help) {
+            WorkshiftManagerTutorial.showWorkShiftManagerTurorial(ManageCalendar.this, "ManageCalendar");
+        }
+
+
+        return super.onOptionsItemSelected(item);
     }
 
 }

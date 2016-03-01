@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cloriti.workshiftmanager.selection.MultiSelectionMenu;
 import com.cloriti.workshiftmanager.util.Property;
@@ -197,7 +196,7 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_workshift_manager, menu);
+        getMenuInflater().inflate(R.menu.menu_workshift_manager_setting, menu);
         return true;
     }
 
@@ -208,15 +207,9 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Toast.makeText(getApplicationContext(), "Non Disponibile da rimuovere!", Toast.LENGTH_SHORT).show();
-        }
         if (id == R.id.action_help) {
             WorkshiftManagerTutorial.showWorkShiftManagerTurorial(WorkShiftManagerSetting.this, "WorkShiftManagerSetting");
         }
-
-
         return super.onOptionsItemSelected(item);
     }
 }
