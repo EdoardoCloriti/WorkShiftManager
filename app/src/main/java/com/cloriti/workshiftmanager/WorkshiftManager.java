@@ -8,7 +8,6 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -63,30 +62,24 @@ public class WorkshiftManager extends AppCompatActivity {
         }
         AccessToDB db = new AccessToDB();
         if (db.existPropery(Property.NOTIFICA, getApplicationContext()) != 0) {
-            // Set the alarm to start at approximately 2:00 p.m.
+
+            alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(getApplicationContext(), WorkShiftManagerReceiver.class);
+            pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+
+            // Set the alarm to start at some time.
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(System.currentTimeMillis());
             int curHr = calendar.get(Calendar.HOUR_OF_DAY);
-
-            // Checking whether current hour is over 14
-            if (curHr >= 2) {
-                // Since current hour is over 14, setting the date to the next day
+            // Checking whether current hour is over 15
+            if (curHr >= 15) {
+                // Since current hour is over 15, setting the date to the next day
                 calendar.add(Calendar.DATE, 1);
             }
-            Log.v("ADebugTag", "It work! - INIT");
-            calendar.set(Calendar.HOUR_OF_DAY, 1);
-            calendar.set(Calendar.MINUTE, 5);
-            // Schedule alarm manager
-
-            Intent myIntent = new Intent(WorkshiftManager.this, WorkshiftManager.class);
-            pendingIntent = PendingIntent.getBroadcast(WorkshiftManager.this, 0, myIntent, 0);
-
-            alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-
-            // With setInexactRepeating(), you have to use one of the AlarmManager interval
-            // constants--in this case, AlarmManager.INTERVAL_DAY.
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, calendar.getTimeInMillis(), AlarmManager.ELAPSED_REALTIME, pendingIntent);
-
+            calendar.set(Calendar.HOUR_OF_DAY, 15);
+            calendar.set(Calendar.MINUTE, 30);
+            // every day
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         }
 
         startButton.setOnClickListener(new View.OnClickListener() {

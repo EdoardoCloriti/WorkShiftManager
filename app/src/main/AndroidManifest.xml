@@ -89,7 +89,7 @@
             android:label="@string/title_activity_display_mounth"
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
-        <receiver android:name=".util.notification.NotificationReceiver" />
+        <receiver android:name=".WorkShiftManagerReceiver" />
     </application>
 
 </manifest>
