@@ -1,7 +1,6 @@
 package com.cloriti.workshiftmanager.manage;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,14 +9,15 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.cloriti.workshiftmanager.util.IDs;
 import com.cloriti.workshiftmanager.R;
+import com.cloriti.workshiftmanager.util.IDs;
 import com.cloriti.workshiftmanager.util.SelectHours;
+import com.cloriti.workshiftmanager.util.Turn;
+import com.cloriti.workshiftmanager.util.db.AccessToDB;
 
 public class CreateWorkShift extends AppCompatActivity {
 
-    private Intent outputIntent = null;
-
+    Turn turn = new Turn();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,16 +27,17 @@ public class CreateWorkShift extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         final Bundle inputBundle = this.getIntent().getExtras();
-        outputIntent = new Intent(getApplicationContext(), ManageWorkShift.class);
         TextView title = (TextView) findViewById(R.id.title_add_turn_menu);
         Button insertMattina = (Button) findViewById(R.id.inserisci_mattina);
         Button insertPomeriggio = (Button) findViewById(R.id.inserisci_pomeriggio);
+        Button submit = (Button) findViewById(R.id.submit);
         Button back = (Button) findViewById(R.id.back);
         // gestione del titolo della pagina -> default senza data... inserimento della data di riferimento
-        outputIntent.putExtra(IDs.DATA, inputBundle.getString(IDs.DATA));
-        outputIntent.putExtra(IDs.WEEK_ID, inputBundle.getInt(IDs.WEEK_ID));
-        outputIntent.putExtra(IDs.YEAR, inputBundle.getInt(IDs.YEAR));
-        outputIntent.putExtra(IDs.MONTH, inputBundle.getInt(IDs.MONTH));
+        turn.setDatariferimento(inputBundle.getString(IDs.DATA));
+        turn.setWeekId(inputBundle.getInt(IDs.WEEK_ID));
+        turn.setYear(inputBundle.getInt(IDs.YEAR));
+        turn.setMounth(inputBundle.getInt(IDs.MONTH));
+
         title.setText(getString(R.string.title_turn_menu) + "\r\n" + inputBundle.getString(IDs.DATA));
         // gestione dell'inserimento della mattina
         insertMattina.setOnClickListener(new View.OnClickListener() {
@@ -45,7 +46,6 @@ public class CreateWorkShift extends AppCompatActivity {
             public void onClick(View v) {
                 final Intent selectTurnCalendar = new Intent(getApplicationContext(), SelectHours.class);
                 selectTurnCalendar.putExtra(IDs.PART_OF_DAY, "am");
-                outputIntent.putExtra(IDs.PART_OF_DAY, "am");
                 startActivityForResult(selectTurnCalendar, IDs.SelectTurn);
             }
 
@@ -57,8 +57,20 @@ public class CreateWorkShift extends AppCompatActivity {
             public void onClick(View v) {
                 Intent selectTurnCalendar = new Intent(getApplicationContext(), SelectHours.class);
                 selectTurnCalendar.putExtra(IDs.PART_OF_DAY, "pm");
-                outputIntent.putExtra(IDs.PART_OF_DAY, "pm");
                 startActivityForResult(selectTurnCalendar, 2);
+            }
+        });
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CheckBox priority = (CheckBox) findViewById(R.id.priority);
+                turn.setIsImportante(priority.isChecked());
+                turn.setHour();
+                AccessToDB db = new AccessToDB();
+                db.insertTurn(turn, getApplicationContext());
+                turn = null;
+                finish();
             }
         });
         // gestione del tasto back
@@ -66,9 +78,7 @@ public class CreateWorkShift extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                CheckBox priority = (CheckBox) findViewById(R.id.priority);
-                outputIntent.putExtra(IDs.PRIORITY, priority.isChecked() ? 1 : 0);
-                setResult(1, outputIntent);
+                turn = null;
                 finish();
             }
         });
@@ -89,16 +99,15 @@ public class CreateWorkShift extends AppCompatActivity {
             if (!result.containsKey("back")) {
                 if (result.getString(IDs.ORARIO_MATTINA) != null) {
                     String[] orarioMattina = result.getString(IDs.ORARIO_MATTINA).split("-");
-                    outputIntent.putExtra(IDs.INIZIO_MATTINA, orarioMattina[0]);
-                    outputIntent.putExtra(IDs.FINE_MATTINA, orarioMattina[1]);
+                    turn.setIniziotMattina(orarioMattina[0]);
+                    turn.setFineMattina(orarioMattina[1]);
                 }
 
                 if (result.getString(IDs.ORARIO_POMERIGGIO) != null) {
                     String[] orarioPomeriggio = result.getString(IDs.ORARIO_POMERIGGIO).split("-");
-                    outputIntent.putExtra(IDs.INIZIO_POMERIGGIO, orarioPomeriggio[0]);
-                    outputIntent.putExtra(IDs.FINE_POMERIGGIO, orarioPomeriggio[1]);
+                    turn.setIniziotPomeriggio(orarioPomeriggio[0]);
+                    turn.setFinePomeriggio(orarioPomeriggio[1]);
                 }
-                outputIntent.putExtra(IDs.PRIORITY, result.getBoolean(IDs.PRIORITY));
             }
         }
     }
