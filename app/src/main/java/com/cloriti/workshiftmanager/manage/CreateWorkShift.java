@@ -1,5 +1,8 @@
 package com.cloriti.workshiftmanager.manage;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,18 +13,27 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cloriti.workshiftmanager.R;
+import com.cloriti.workshiftmanager.WorkShiftManagerReceiver;
 import com.cloriti.workshiftmanager.WorkShiftManagerSetting;
 import com.cloriti.workshiftmanager.util.IDs;
+import com.cloriti.workshiftmanager.util.Property;
 import com.cloriti.workshiftmanager.util.SelectHours;
 import com.cloriti.workshiftmanager.util.Turn;
 import com.cloriti.workshiftmanager.util.db.AccessToDB;
 import com.cloriti.workshiftmanager.util.tutorial.WorkshiftManagerTutorial;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class CreateWorkShift extends AppCompatActivity {
 
-    Turn turn = new Turn();
+    private final static String PATTERN = "dd/MM/yyyy";
+    private PendingIntent pendingIntent;
+    private AlarmManager alarmManager;
+    private Turn turn = new Turn();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +85,12 @@ public class CreateWorkShift extends AppCompatActivity {
                 turn.setHour();
                 AccessToDB db = new AccessToDB();
                 db.insertTurn(turn, getApplicationContext());
+                if (db.existPropery(Property.NOTIFICA, getApplicationContext()) != 0) {
+                    if (!isNull(turn.getInizioMattina()))
+                        generateRememberNotify(turn.getInizioMattinaH(), turn.getInizioMattinaM(), turn.getDataRierimentoDateStr());
+                    if (!isNull(turn.getInizioPomeriggio()))
+                        generateRememberNotify(turn.getInizioPomeriggioH(), turn.getInizioPomeriggioM(), turn.getDataRierimentoDateStr());
+                }
                 turn = null;
                 finish();
             }
@@ -116,6 +134,32 @@ public class CreateWorkShift extends AppCompatActivity {
         }
     }
 
+    public void generateRememberNotify(Integer ore, Integer minuti, String data) {
+        //Gestione delle notifiche giornaliere
+        alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getApplicationContext(), WorkShiftManagerReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+
+        // Set the alarm to start at some time.
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        // Checking whether current hour is over 15
+        SimpleDateFormat sdf = new SimpleDateFormat(PATTERN);
+        try {
+            calendar.setTime(sdf.parse(data));
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "Impossibile creare la notifica", Toast.LENGTH_SHORT);
+            return;
+        }
+
+        calendar.set(Calendar.HOUR_OF_DAY, ore);
+        calendar.set(Calendar.MINUTE, minuti);
+        calendar.add(Calendar.MINUTE, -30);
+
+        // every day
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -143,4 +187,7 @@ public class CreateWorkShift extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private boolean isNull(String orario) {
+        return "null:null".equals(orario) ? true : false;
+    }
 }

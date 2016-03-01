@@ -60,6 +60,7 @@ public class ManageCalendar extends AppCompatActivity {
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 if (MANAGE.equals(useCaseCalling)) {
                     Calendar sysDate = Calendar.getInstance();
+                    sysDate.add(Calendar.DAY_OF_MONTH, -3);
 
                     Intent add = new Intent(getApplicationContext(), CreateWorkShift.class);
                     Calendar selected = Calendar.getInstance();
@@ -67,6 +68,7 @@ public class ManageCalendar extends AppCompatActivity {
 
                     SimpleDateFormat sdf = new SimpleDateFormat(Turn.PATTERN);
                     String selectedDay = new String(sdf.format(selected.getTime()));
+
                     if (sysDate.before(selected)) {
                         Toast.makeText(getApplicationContext(), selectedDay, Toast.LENGTH_SHORT).show();
 
