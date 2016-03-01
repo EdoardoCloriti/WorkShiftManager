@@ -96,28 +96,24 @@ public class SelectHours extends AppCompatActivity {
       * Metodo per la gestione dell'orario del turno caso 'AM'
       */
     private String manageAM(Integer hourStart, Integer minuteStart, Integer hourFinish, Integer minuteFinish) {
-        String result = null;
-        if (!validatTimetable(hourStart, minuteStart, hourFinish, minuteFinish)) {
+        if (!validatTimetable(hourStart, minuteStart, hourFinish, minuteFinish))
             return null;
-        } else {
-            result = (hourStart + ":" + minuteStart);
-            result = result + "-" + (hourFinish + ":" + minuteFinish);
-        }
-        return result;
+        else if (!validateStartHour("am", hourStart))
+            return null;
+        else
+            return (hourStart + ":" + minuteStart) + "-" + (hourFinish + ":" + minuteFinish);
     }
 
     /*
      * Metodo per la gestione dell'orario del turno caso 'PM'
      */
     private String managePM(Integer hourStart, Integer minuteStart, Integer hourFinish, Integer minuteFinish) {
-        String result = null;
-        if (!validatTimetable(hourStart, minuteStart, hourFinish, minuteFinish)) {
+        if (!validatTimetable(hourStart, minuteStart, hourFinish, minuteFinish))
             return null;
-        } else {
-            result = (hourStart + ":" + minuteStart);
-            result = result + "-" + (hourFinish + ":" + minuteFinish);
-        }
-        return result;
+        else if (!validateStartHour("am", hourStart))
+            return null;
+        else
+            return (hourStart + ":" + minuteStart) + "-" + (hourFinish + ":" + minuteFinish);
     }
 
     private void alertTost() {
@@ -153,30 +149,12 @@ public class SelectHours extends AppCompatActivity {
             return true;
     }
 
-    private boolean verifyInitHour(String orario, int hour) {
+    private boolean validateStartHour(String orario, int hour) {
         if ("am".equalsIgnoreCase(orario)) {
-            return hour <= 13;
+            return hour <= 11;
         } else if ("pm".equalsIgnoreCase(orario)) {
-            return hour >= 13;
+            return hour >= 11;
         }
         return false;
     }
-
-    private boolean verifyFinishHour(String orario, int hour) {
-        //TODO: per ora non sono previsti controlli per l'orario di fine turno -> return true
-        /*if ("am".equalsIgnoreCase(orario)) {
-            if (hour > 16)
-                return false;
-            else
-                return true;
-        } else if ("pm".equalsIgnoreCase(orario)) {
-            if (hour < 14)
-                return false;
-            else
-                return true;
-        }
-        return false;*/
-        return true;
-    }
-
 }
