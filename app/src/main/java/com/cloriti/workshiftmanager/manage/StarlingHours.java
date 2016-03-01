@@ -5,10 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -23,16 +20,13 @@ import com.cloriti.workshiftmanager.util.Turn;
 import com.cloriti.workshiftmanager.util.db.AccessToDB;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 public class StarlingHours extends AppCompatActivity {
 
-    private Dialog d;
     private static final int MONDAY = 1;
+    private Dialog d;
     private Turn turn = null;
-    private List<Turn> turns = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +40,6 @@ public class StarlingHours extends AppCompatActivity {
         Button submit = (Button) findViewById(R.id.submit);
         Button back = (Button) findViewById(R.id.back);
 
-        turns = new ArrayList<Turn>();
         setCalendar(calendar);
 
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -61,18 +54,6 @@ public class StarlingHours extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), selectedDay, Toast.LENGTH_SHORT).show();
                 select.putExtra(IDs.DATA, selectedDay);
                 createDialog(selectedDay);
-            }
-        });
-
-        submit.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                AccessToDB access = new AccessToDB();
-                int n = access.updateTurn(turns, getApplicationContext());
-                turns = null;
-                Toast.makeText(getApplicationContext(), "inseriti:" + n + "giorni di straordinari", Toast.LENGTH_SHORT).show();
-                finish();
             }
         });
 
@@ -95,7 +76,7 @@ public class StarlingHours extends AppCompatActivity {
     }
 
     private void createDialog(String selectedDate) {
-        AccessToDB db = new AccessToDB();
+        final AccessToDB db = new AccessToDB();
         turn = db.getTurnBySelectedDay(selectedDate, getApplicationContext());
         if(turn.isNull()) {
             turn = new Turn();
@@ -119,7 +100,7 @@ public class StarlingHours extends AppCompatActivity {
                 double overtime = min + hours;
                 overtime = turn.getOvertime() - overtime;
                 turn.setOvertime(overtime);
-                turns.add(turn);
+                db.insertTurn(turn, getApplicationContext());
                 d.dismiss();
             }
         });
@@ -177,21 +158,6 @@ public class StarlingHours extends AppCompatActivity {
         });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
-    }
-
-    protected void onActivityResult(int arg0, int arg1, Intent arg2) {
-        Bundle bundle = arg2.getExtras();
-        if (!bundle.containsKey("back")) {
-            String referencesDate = null;
-            if (bundle.containsKey(IDs.DATA))
-                referencesDate = bundle.getString(IDs.DATA);
-            double overtime = bundle.getDouble(IDs.OVERTIME);
-            AccessToDB db = new AccessToDB();
-            Turn turn = db.getTurnBySelectedDay(referencesDate, getApplicationContext());
-            overtime = turn.getOvertime() - overtime;
-            turn.setOvertime(overtime);
-            turns.add(turn);
-        }
     }
 
     private int getInteger(String str) {
