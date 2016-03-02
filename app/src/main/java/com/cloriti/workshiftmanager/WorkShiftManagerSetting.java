@@ -41,6 +41,14 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
         Button back = (Button) findViewById(R.id.back);
 
         CheckBox notify = (CheckBox) findViewById(R.id.notify);
+        notify.setOnCheckedChangeListener(null);
+        if (db.existPropery(Property.NOTIFICA, getApplicationContext()) != 0) {
+            if ("true".equals(db.getProperty(Property.NOTIFICA, getApplicationContext()).getValue()))
+                notify.setChecked(true);
+            else
+                notify.setChecked(false);
+        }
+
         notify.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
