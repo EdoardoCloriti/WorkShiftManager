@@ -195,32 +195,4 @@ public class DbAdapter {
         ContentValues values = fillProperty(property, value);
         return database.update(SETTING_DATABASE_TABLE, values, PROPERTY + "=?", new String[]{property}) > 0;
     }
-
-    // TODO:metodi in modalità DEV
-    public boolean resetSettingDB() {
-        try {
-            dbHelper.onResetSetting(database);
-            return true;
-        } catch (Throwable t) {
-            return false;
-        }
-    }
-
-    public boolean resetTurnDB() {
-        try {
-            dbHelper.onResetTurn(database);
-            return true;
-        } catch (Throwable t) {
-            return false;
-        }
-    }
-
-    public boolean resetHourDB() {
-        try {
-            dbHelper.onResetTurn(database);
-            return true;
-        } catch (Throwable t) {
-            return false;
-        }
-    }
 }

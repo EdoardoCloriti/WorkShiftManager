@@ -116,9 +116,12 @@
     <string name="tutorial_ManageWorkshift">Pagina per la creazione di un nuovo turo, una volta selezionata la data sara\à possibile inserir:\n-Il turno della mattina (facoltativo)\n-il turno del pomeriggio (Facoltativo)\n-se \è importante o meno (facoltativo)\n</string>
     <string name="tutorial_AddOvertime">Pagina per l\'aggiunta degli straordinari in un determinato giorno, una volta selezionato il giorno apparira un pop up in cui \è possibile inserire ore e minuti degli straordinari effettuati</string>
     <string name="tutorial_StarlingHour">Pagina per lo storno delle ore in un determinato giorno, una volta selezionato il giorno apparira un pop up in cui \è possibile inserire le ore e minuti dello storno</string>
-    <string name="tutorial_not_disponible">Tutorial non ancora disponibile</string>
-    <string name="title_activity_work_shift_manager_calendar_selection">
-    </string>
+    <string name="tutorial_display_week">Pagina per la visualizzare le ore registrate in una determinata settimana, selezionare un gionro all\'interno della settimana desiderata per essere reindirizzati alla pagina di visualizzazione dei dati</string>
+    <string name="tutorial_display_turn">Pagina per la visualizzazione del turno lavorativo registrato per una specifica data, una volta selezionata la data si verr\à reindirizzati alla pagina di visualizzazione, se si deisdera da qui \è possibile eliminare il turno </string>
+    <string name="tutorial_display_month">Pagina per la visualizzazione delle ore e degli straordinari registrati in un certo mese, dopo l\'inserimento del mese e dell\'anno nella finestra pop up si verr\à reindirizzati alla pagina di visualizzazione dei dati </string>
+    <string name="tutorial_display_year">Pagina per la visualizzazione dell\'anno in corso, vengono visualizzate ore mensili e straordinardi suddivisi per mese</string>
+    <string name="tutorial_not_available">Tutorial non ancora disponibile</string>
+    <string name="title_activity_work_shift_manager_calendar_selection"></string>
     <string name="title_activity_manage_calendar">ManageCalendar</string>
 
 </resources>

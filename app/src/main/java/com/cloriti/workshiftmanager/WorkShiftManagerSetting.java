@@ -41,7 +41,7 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
 
         setStateOre(db);
         setStateNotify(db);
-        setStateAllarm(db);
+        setStateAlarm(db);
 
 
         submit.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +63,7 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
                     check = false;
                 }
                 manageAlarm(allarm, db);
-                mangaeNotify(notify, db);
+                manageNotify(notify, db);
 
                 if (check) {
                     if (db.getProperty(Property.READYTOGO, getApplicationContext()) == null) {
@@ -104,16 +104,16 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
         }
     }
 
-    private void setStateAllarm(AccessToDB db) {
-        CheckBox allarm = (CheckBox) findViewById(R.id.activeAllarm);
+    private void setStateAlarm(AccessToDB db) {
+        CheckBox alarm = (CheckBox) findViewById(R.id.activeAllarm);
         if (db.existPropery(Property.ALLARM, getApplicationContext()) != 0) {
             Property notifyPr = db.getProperty(Property.ALLARM, getApplicationContext());
             if ("true".equals(notifyPr.getValue()))
-                allarm.setChecked(true);
+                alarm.setChecked(true);
             else
-                allarm.setChecked(false);
+                alarm.setChecked(false);
         } else
-            allarm.setChecked(false);
+            alarm.setChecked(false);
     }
 
     private void setStateNotify(AccessToDB db) {
@@ -128,47 +128,47 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
             notify.setChecked(false);
     }
 
-    private void manageAlarm(CheckBox allarm, AccessToDB db) {
-        if (allarm.isChecked()) {
-            Property activeAllarm = new Property();
-            activeAllarm.setProperty(Property.ALLARM);
-            activeAllarm.setValue("true");
-            if (db.existPropery(activeAllarm, getApplicationContext()) != 0) {
+    private void manageAlarm(CheckBox alarm, AccessToDB db) {
+        if (alarm.isChecked()) {
+            Property activeAlarm = new Property();
+            activeAlarm.setProperty(Property.ALLARM);
+            activeAlarm.setValue("true");
+            if (db.existPropery(activeAlarm, getApplicationContext()) != 0) {
                 Property propertyOnDbdb = db.getProperty(Property.ALLARM, getApplicationContext());
-                if (!activeAllarm.getValue().equals(propertyOnDbdb.getValue())) {
-                    db.insertProperty(activeAllarm, getApplicationContext());
+                if (!activeAlarm.getValue().equals(propertyOnDbdb.getValue())) {
+                    db.insertProperty(activeAlarm, getApplicationContext());
                     startService(new Intent(getApplicationContext(), WorkShiftManagerAlarmService.class));
                 }
             } else {
-                db.insertProperty(activeAllarm, getApplicationContext());
+                db.insertProperty(activeAlarm, getApplicationContext());
                 startService(new Intent(getApplicationContext(), WorkShiftManagerAlarmService.class));
             }
-        } else if (!allarm.isChecked()) {
-            Property activeAllarm = new Property();
-            activeAllarm.setProperty(Property.ALLARM);
-            activeAllarm.setValue("false");
-            if (db.existPropery(activeAllarm, getApplicationContext()) != 0) {
-                Property propertyOnDbdb = db.getProperty(Property.ALLARM, getApplicationContext());
-                if (!activeAllarm.getValue().equals(propertyOnDbdb.getValue())) {
-                    db.insertProperty(activeAllarm, getApplicationContext());
+        } else if (!alarm.isChecked()) {
+            Property activeAlarm = new Property();
+            activeAlarm.setProperty(Property.ALLARM);
+            activeAlarm.setValue("false");
+            if (db.existPropery(activeAlarm, getApplicationContext()) != 0) {
+                Property propertyOnDB = db.getProperty(Property.ALLARM, getApplicationContext());
+                if (!activeAlarm.getValue().equals(propertyOnDB.getValue())) {
+                    db.insertProperty(activeAlarm, getApplicationContext());
                     stopService(new Intent(getApplicationContext(), WorkShiftManagerAlarmService.class));
                 }
             } else {
-                db.insertProperty(activeAllarm, getApplicationContext());
+                db.insertProperty(activeAlarm, getApplicationContext());
                 stopService(new Intent(getApplicationContext(), WorkShiftManagerAlarmService.class));
             }
         }
     }
 
 
-    private void mangaeNotify(CheckBox notify, AccessToDB db) {
+    private void manageNotify(CheckBox notify, AccessToDB db) {
         if (notify.isChecked()) {
             Property activeNotify = new Property();
             activeNotify.setProperty(Property.NOTIFICA);
             activeNotify.setValue("true");
             if (db.existPropery(activeNotify, getApplicationContext()) != 0) {
-                Property propertyOnDbdb = db.getProperty(Property.NOTIFICA, getApplicationContext());
-                if (!activeNotify.getValue().equals(propertyOnDbdb.getValue())) {
+                Property propertyOnDD = db.getProperty(Property.NOTIFICA, getApplicationContext());
+                if (!activeNotify.getValue().equals(propertyOnDD.getValue())) {
                     db.insertProperty(activeNotify, getApplicationContext());
                     startService(new Intent(getApplicationContext(), WorkShiftManagerNotificationService.class));
                 }
@@ -181,8 +181,8 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
             activeNotify.setProperty(Property.NOTIFICA);
             activeNotify.setValue("false");
             if (db.existPropery(activeNotify, getApplicationContext()) != 0) {
-                Property propertyOnDbdb = db.getProperty(Property.NOTIFICA, getApplicationContext());
-                if (!activeNotify.getValue().equals(propertyOnDbdb.getValue())) {
+                Property propertyOnDB = db.getProperty(Property.NOTIFICA, getApplicationContext());
+                if (!activeNotify.getValue().equals(propertyOnDB.getValue())) {
                     db.insertProperty(activeNotify, getApplicationContext());
                     stopService(new Intent(getApplicationContext(), WorkShiftManagerNotificationService.class));
                 }

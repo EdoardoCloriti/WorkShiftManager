@@ -34,36 +34,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public void onResetSetting(SQLiteDatabase db) throws Throwable {
-        try {
-            dropSettingTable(db);
-            createSettingTable(db);
-        } catch (Throwable t) {
-            throw t;
-        }
-
-    }
-
-    public void onResetTurn(SQLiteDatabase db) throws Throwable {
-        try {
-            dropTurnTable(db);
-            createTurnTable(db);
-        } catch (Throwable t) {
-            throw t;
-        }
-
-    }
-
-    public void onResetHour(SQLiteDatabase db) throws Throwable {
-        try {
-            dropHourTable(db);
-            createHourTable(db);
-        } catch (Throwable t) {
-            throw t;
-        }
-
-    }
-
     private void createSettingTable(SQLiteDatabase db) {
         db.execSQL(SETTING_DATABASE_CREATE);
     }
