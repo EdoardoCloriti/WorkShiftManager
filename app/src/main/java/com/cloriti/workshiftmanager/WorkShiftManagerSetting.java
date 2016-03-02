@@ -142,7 +142,7 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
                     AlertDialog.Builder builder = new AlertDialog.Builder(WorkShiftManagerSetting.this);
                     builder.setTitle(getApplicationContext().getString(R.string.title_activity_select_hours));
                     builder.setMessage("Impostazioni non valide, ore settimanali obbligatorie");
-                    builder.setIcon(R.mipmap.ic_launcher);
+                    builder.setIcon(R.drawable.ic_error_black_48dp);
                     builder.setPositiveButton(getApplicationContext().getString(R.string.msg_ok), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -172,7 +172,6 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
             oreContratto.setText(str, TextView.BufferType.EDITABLE);
         }
     }
-
 
 
     private void setStateNotify(AccessToDB db) {

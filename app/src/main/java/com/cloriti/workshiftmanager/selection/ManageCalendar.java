@@ -258,6 +258,7 @@ public class ManageCalendar extends AppCompatActivity {
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getApplicationContext());
         alertDialogBuilder.setTitle(getString(R.string.msg_valore_non_corretto));
+        alertDialogBuilder.setIcon(R.drawable.ic_error_black_48dp);
         alertDialogBuilder.setMessage(message);
         alertDialogBuilder.setPositiveButton(getString(R.string.msg_ok), new DialogInterface.OnClickListener() {
 

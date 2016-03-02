@@ -20,7 +20,6 @@ import com.cloriti.workshiftmanager.WorkShiftManagerReceiver;
 import com.cloriti.workshiftmanager.WorkShiftManagerSetting;
 import com.cloriti.workshiftmanager.util.IDs;
 import com.cloriti.workshiftmanager.util.Property;
-import com.cloriti.workshiftmanager.util.SelectHours;
 import com.cloriti.workshiftmanager.util.Turn;
 import com.cloriti.workshiftmanager.util.db.AccessToDB;
 import com.cloriti.workshiftmanager.util.tutorial.WorkshiftManagerTutorial;

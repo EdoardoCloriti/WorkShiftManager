@@ -40,7 +40,7 @@
             android:label="@string/title_activity_create_work_shift"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".util.SelectHours"
+            android:name=".manage.SelectHours"
             android:label="@string/title_activity_select_hours"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

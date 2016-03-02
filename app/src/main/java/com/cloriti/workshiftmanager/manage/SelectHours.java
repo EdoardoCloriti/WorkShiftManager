@@ -1,4 +1,4 @@
-package com.cloriti.workshiftmanager.util;
+package com.cloriti.workshiftmanager.manage;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.cloriti.workshiftmanager.R;
 import com.cloriti.workshiftmanager.WorkShiftManagerSetting;
-import com.cloriti.workshiftmanager.manage.CreateWorkShift;
+import com.cloriti.workshiftmanager.util.IDs;
 import com.cloriti.workshiftmanager.util.tutorial.WorkshiftManagerTutorial;
 
 import java.util.Calendar;
@@ -137,7 +137,7 @@ public class SelectHours extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(SelectHours.this);
         builder.setTitle(this.getString(R.string.title_activity_select_hours));
         builder.setMessage("Orario inserito non valido si prega di ricompilare");
-        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setIcon(R.drawable.ic_error_black_48dp);
         builder.setPositiveButton(this.getString(R.string.msg_ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
