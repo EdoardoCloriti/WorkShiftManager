@@ -101,7 +101,6 @@ public class ManageCalendar extends AppCompatActivity {
                     createDialogOvertime(selectedDay);
                 } else if (STARLING.equals(useCaseCalling)) {
                     GregorianCalendar day = new GregorianCalendar(year, month, dayOfMonth);
-
                     SimpleDateFormat sdf = new SimpleDateFormat(Turn.PATTERN);
                     String selectedDay = new String(sdf.format(day.getTime()));
                     Toast.makeText(getApplicationContext(), selectedDay, Toast.LENGTH_SHORT).show();
@@ -294,7 +293,7 @@ public class ManageCalendar extends AppCompatActivity {
                 WorkshiftManagerTutorial.showWorkShiftManagerTurorial(ManageCalendar.this, WorkshiftManagerTutorial.MANAGE_WORKSHIFT);
             }
             if (DISPLAY.equalsIgnoreCase(useCaseCalling)) {
-                WorkshiftManagerTutorial.showWorkShiftManagerTurorial(ManageCalendar.this, "");
+                WorkshiftManagerTutorial.showWorkShiftManagerTurorial(ManageCalendar.this, WorkshiftManagerTutorial.DISPLAY);
             }
             if (OVERTIME.equalsIgnoreCase(useCaseCalling)) {
                 WorkshiftManagerTutorial.showWorkShiftManagerTurorial(ManageCalendar.this, WorkshiftManagerTutorial.ADD_OVERTIME);
@@ -303,7 +302,7 @@ public class ManageCalendar extends AppCompatActivity {
                 WorkshiftManagerTutorial.showWorkShiftManagerTurorial(ManageCalendar.this, WorkshiftManagerTutorial.STARLING_HOURS);
             }
             if (DISPLAY_WEEK.equalsIgnoreCase(useCaseCalling)) {
-                WorkshiftManagerTutorial.showWorkShiftManagerTurorial(ManageCalendar.this, "");
+                WorkshiftManagerTutorial.showWorkShiftManagerTurorial(ManageCalendar.this, WorkshiftManagerTutorial.DISPLAY_WEEK);
             }
         }
 

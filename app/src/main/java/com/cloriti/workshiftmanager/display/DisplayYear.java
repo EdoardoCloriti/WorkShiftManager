@@ -182,7 +182,7 @@ public class DisplayYear extends AppCompatActivity {
             startActivity(i);
         }
         if (id == R.id.action_help) {
-            WorkshiftManagerTutorial.showWorkShiftManagerTurorial(DisplayYear.this, "DisplayYear");
+            WorkshiftManagerTutorial.showWorkShiftManagerTurorial(DisplayYear.this, WorkshiftManagerTutorial.DISPLAY_YEAR);
         }
 
 

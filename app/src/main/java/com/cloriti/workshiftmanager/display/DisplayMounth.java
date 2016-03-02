@@ -89,7 +89,7 @@ public class DisplayMounth extends AppCompatActivity {
             startActivity(i);
         }
         if (id == R.id.action_help) {
-            WorkshiftManagerTutorial.showWorkShiftManagerTurorial(DisplayMounth.this, "DisplayMounth");
+            WorkshiftManagerTutorial.showWorkShiftManagerTurorial(DisplayMounth.this, WorkshiftManagerTutorial.DISPLAY_MONTH);
         }
 
 

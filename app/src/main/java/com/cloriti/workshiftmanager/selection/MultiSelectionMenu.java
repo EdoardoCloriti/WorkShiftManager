@@ -33,9 +33,6 @@ public class MultiSelectionMenu extends AppCompatActivity {
         //Portait (Verticale)
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-
-        setContentView(R.layout.activity_multi_selection_menu);
-
         Button manageWorkShift = (Button) findViewById(R.id.insertT);
         Button displayTurn = (Button) findViewById(R.id.visualTurn);
         Button addOvertime = (Button) findViewById(R.id.addextraordinary);
@@ -52,7 +49,6 @@ public class MultiSelectionMenu extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), ManageCalendar.class);
                 i.putExtra("USE_CASE", "ManageWorkShift");
-                //Intent i = new Intent(getApplicationContext(), ManageWorkShift.class);
                 startActivity(i);
             }
         });
@@ -72,7 +68,6 @@ public class MultiSelectionMenu extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), ManageCalendar.class);
                 i.putExtra("USE_CASE", "DisplayWorkShift");
-                //Intent i = new Intent(getApplicationContext(), DisplayWorkShift.class);
                 startActivity(i);
             }
         });
@@ -83,7 +78,6 @@ public class MultiSelectionMenu extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), ManageCalendar.class);
                 i.putExtra("USE_CASE", "AddOvertime");
-                //Intent i = new Intent(getApplicationContext(), AddOvertime.class);
                 startActivity(i);
             }
         });
@@ -93,7 +87,6 @@ public class MultiSelectionMenu extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), ManageCalendar.class);
                 i.putExtra("USE_CASE", "StarlingHours");
-                //Intent i = new Intent(getApplicationContext(), StarlingHours.class);
                 startActivity(i);
             }
         });
@@ -138,8 +131,6 @@ public class MultiSelectionMenu extends AppCompatActivity {
                         d.dismiss();
                     }
                 });
-                //Intent i = new Intent(getApplicationContext(), MounthSelection.class);
-                //startActivity(i);
             }
         });
         setting.setOnClickListener(new View.OnClickListener() {
@@ -156,7 +147,6 @@ public class MultiSelectionMenu extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), ManageCalendar.class);
                 i.putExtra("USE_CASE", "DisplaySettimana");
-                //Intent i = new Intent(getApplicationContext(), DisplaySettimana.class);
                 startActivity(i);
             }
         });

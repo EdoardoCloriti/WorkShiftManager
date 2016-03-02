@@ -112,7 +112,7 @@ public class DisplayTurn extends AppCompatActivity {
             startActivity(i);
         }
         if (id == R.id.action_help) {
-            WorkshiftManagerTutorial.showWorkShiftManagerTurorial(DisplayTurn.this, "DisplayTurn");
+            WorkshiftManagerTutorial.showWorkShiftManagerTurorial(DisplayTurn.this, WorkshiftManagerTutorial.DISPLAY);
         }
 
 
