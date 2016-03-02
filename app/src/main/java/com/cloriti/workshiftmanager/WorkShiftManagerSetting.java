@@ -93,9 +93,6 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
 
         setStateOre(db);
         setStateNotify(db);
-        setStateAlarm(db);
-
-
         submit.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -167,17 +164,7 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
         }
     }
 
-    private void setStateAlarm(AccessToDB db) {
-        CheckBox alarm = (CheckBox) findViewById(R.id.activeAllarm);
-        if (db.existPropery(Property.ALLARM, getApplicationContext()) != 0) {
-            Property notifyPr = db.getProperty(Property.ALLARM, getApplicationContext());
-            if ("true".equals(notifyPr.getValue()))
-                alarm.setChecked(true);
-            else
-                alarm.setChecked(false);
-        } else
-            alarm.setChecked(false);
-    }
+
 
     private void setStateNotify(AccessToDB db) {
         CheckBox notify = (CheckBox) findViewById(R.id.notify);
@@ -226,7 +213,7 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_workshift_manager_setting, menu);
+        getMenuInflater().inflate(R.menu.menu_Workshift_manager_setting, menu);
         return true;
     }
 

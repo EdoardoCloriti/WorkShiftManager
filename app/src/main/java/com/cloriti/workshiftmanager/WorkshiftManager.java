@@ -34,7 +34,9 @@ public class WorkshiftManager extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workshift_manager);
+        //Setting delle impostazioni della Action Bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setLogo(R.mipmap.ic_launcher);
         setSupportActionBar(toolbar);
         //Portait (Verticale)
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
