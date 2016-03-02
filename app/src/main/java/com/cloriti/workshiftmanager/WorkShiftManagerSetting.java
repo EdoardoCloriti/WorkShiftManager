@@ -34,6 +34,15 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
         setContentView(R.layout.activity_work_shift_manager_setting);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setLogo(R.mipmap.ic_launcher);
+        toolbar.setTitle(R.string.title_app_upper);
+        toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_48dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         AccessToDB db = new AccessToDB();
         m = new Intent(getApplicationContext(), MultiSelectionMenu.class);
@@ -213,7 +222,7 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_Workshift_manager_setting, menu);
+        getMenuInflater().inflate(R.menu.menu_workshift_manager_setting, menu);
         return true;
     }
 

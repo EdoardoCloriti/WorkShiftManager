@@ -108,8 +108,6 @@ public class WorkshiftManager extends AppCompatActivity {
                 android.os.Process.killProcess(android.os.Process.myPid());
             }
         });
-        /*if (WorkshiftManagerTutorial.isTutorialReq(WorkshiftManager.this, getLocalClassName()))
-            WorkshiftManagerTutorial.showWorkShiftManagerTurorial(WorkshiftManager.this, WorkshiftManagerTutorial.WORK_SHIFT_MANAGER);*/
     }
 
     @Override

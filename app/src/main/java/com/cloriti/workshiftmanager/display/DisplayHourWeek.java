@@ -23,6 +23,14 @@ public class DisplayHourWeek extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_hour_week);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.title_app_upper);
+        toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_48dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         setSupportActionBar(toolbar);
 
         AccessToDB db = new AccessToDB();
