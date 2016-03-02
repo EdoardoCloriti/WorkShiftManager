@@ -1,5 +1,8 @@
 package com.cloriti.workshiftmanager;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -19,11 +23,9 @@ import com.cloriti.workshiftmanager.util.notification.WorkShiftManagerAlarmServi
 import com.cloriti.workshiftmanager.util.notification.WorkShiftManagerNotificationService;
 import com.cloriti.workshiftmanager.util.tutorial.WorkshiftManagerTutorial;
 
-import org.xml.sax.ErrorHandler;
-
 public class WorkShiftManagerSetting extends AppCompatActivity {
 
-    private Intent e = null;
+    private Dialog d;
     private Intent m = null;
 
     @Override
@@ -34,10 +36,52 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         AccessToDB db = new AccessToDB();
-        e = new Intent(getApplicationContext(), ErrorHandler.class);
         m = new Intent(getApplicationContext(), MultiSelectionMenu.class);
         Button submit = (Button) findViewById(R.id.submit);
         Button back = (Button) findViewById(R.id.back);
+
+        CheckBox notify = (CheckBox) findViewById(R.id.notify);
+        notify.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+
+                if (isChecked) {
+                    d = new Dialog(WorkShiftManagerSetting.this);
+                    d.setTitle("Prova");
+                    d.setContentView(R.layout.dialog_notify_min);
+                    d.show();
+                    Button submit = (Button) d.findViewById(R.id.submit_dialog);
+                    Button back = (Button) d.findViewById(R.id.back_dialog);
+                    submit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AccessToDB db = new AccessToDB();
+                            EditText minuti = (EditText) d.findViewById(R.id.minuti);
+                            String min = minuti.getText().toString();
+                            Property p = new Property();
+                            p.setProperty(Property.NOTIFICA_MIN);
+                            p.setValue(min);
+                            db.insertProperty(p, getApplicationContext());
+                            d.dismiss();
+                        }
+                    });
+
+                    back.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AccessToDB db = new AccessToDB();
+                            Property p = new Property();
+                            p.setProperty(Property.NOTIFICA_MIN);
+                            p.setValue("30");
+                            db.insertProperty(p, getApplicationContext());
+                            d.dismiss();
+                        }
+                    });
+                }
+
+            }
+        });
 
         setStateOre(db);
         setStateNotify(db);
@@ -81,8 +125,20 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
                         startActivity(m);
                         finish();
                     }
-                } else
-                    startActivity(e);
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(WorkShiftManagerSetting.this);
+                    builder.setTitle(getApplicationContext().getString(R.string.title_activity_select_hours));
+                    builder.setMessage("Impostazioni non valide, ore settimanali obbligatorie");
+                    builder.setIcon(R.mipmap.ic_launcher);
+                    builder.setPositiveButton(getApplicationContext().getString(R.string.msg_ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog d = builder.create();
+                    d.show();
+                }
             }
         });
 
