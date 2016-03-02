@@ -54,20 +54,11 @@
 
 
         <CheckBox
-            android:id="@+id/activeAllarm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/ore"
-            android:checked="false"
-            android:text="@string/allarm" />
-
-        <CheckBox
             android:id="@+id/notify"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/activeAllarm"
+            android:layout_below="@+id/ore"
             android:checked="false"
             android:text="@string/notifiche" />
 
