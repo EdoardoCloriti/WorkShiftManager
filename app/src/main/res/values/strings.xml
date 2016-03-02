@@ -111,11 +111,11 @@
     <!-- Tutorial -->
     <string name="tutorial_title">Tutorial</string>
     <string name="tutorial_WorkShfitManager">Benvenuto in WorkShiftManager, l\'applicazione che ti consente di gestire i tuoi turni di lavorotreamite l\'applicazione potrai inserire i turni, visualizzarli, tenere traccia delle ore settimanali, aggiungere e rimuovere straordinari, ricevere un Alert prima dell\'inizio del turno e sincronizzare i turni inseriti con i tuoi calendari di Google</string>
-    <string name="tutorial_WorkShfitManager_setting">prova tutorial</string>
-    <string name="tutorial_MultiSelectionMenu">prova tutorial</string>
-    <string name="tutorial_ManageWorkshift">prova tutorial</string>
-    <string name="tutorial_AddOvertime">prova tutorial</string>
-    <string name="tutorial_StarlingHour">prova tutorial</string>
+    <string name="tutorial_WorkShfitManager_setting">Pagina per la gestione delle impostazioni dell\'applicazione, in questa pagina si pu\ò settare: \n -Il numero di ore settimanali.\n -se ricevere o meno notifiche prima dei turni\n -quanti minuti prima ricevere le notifiche\n -se collegare la applicazione a Google Calendar</string>
+    <string name="tutorial_MultiSelectionMenu">Pagina di selezione della funzionalit\à richiesta, una volta toccato il bottone relativo alla funzionalit\à desiderata di verr\à reindirizzati alla pagina di gestione appropriata</string>
+    <string name="tutorial_ManageWorkshift">Pagina per la creazione di un nuovo turo, una volta selezionata la data sara\à possibile inserir:\n-Il turno della mattina (facoltativo)\n-il turno del pomeriggio (Facoltativo)\n-se \è importante o meno (facoltativo)\n</string>
+    <string name="tutorial_AddOvertime">Pagina per l\'aggiunta degli straordinari in un determinato giorno, una volta selezionato il giorno apparira un pop up in cui \è possibile inserire ore e minuti degli straordinari effettuati</string>
+    <string name="tutorial_StarlingHour">Pagina per lo storno delle ore in un determinato giorno, una volta selezionato il giorno apparira un pop up in cui \è possibile inserire le ore e minuti dello storno</string>
     <string name="tutorial_not_disponible">Tutorial non ancora disponibile</string>
     <string name="title_activity_work_shift_manager_calendar_selection">
     </string>

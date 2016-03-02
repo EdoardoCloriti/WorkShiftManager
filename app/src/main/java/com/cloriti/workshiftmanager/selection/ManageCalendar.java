@@ -290,7 +290,21 @@ public class ManageCalendar extends AppCompatActivity {
             startActivity(i);
         }
         if (id == R.id.action_help) {
-            WorkshiftManagerTutorial.showWorkShiftManagerTurorial(ManageCalendar.this, "ManageCalendar");
+            if (MANAGE.equals(useCaseCalling)) {
+                WorkshiftManagerTutorial.showWorkShiftManagerTurorial(ManageCalendar.this, WorkshiftManagerTutorial.MANAGE_WORKSHIFT);
+            }
+            if (DISPLAY.equalsIgnoreCase(useCaseCalling)) {
+                WorkshiftManagerTutorial.showWorkShiftManagerTurorial(ManageCalendar.this, "");
+            }
+            if (OVERTIME.equalsIgnoreCase(useCaseCalling)) {
+                WorkshiftManagerTutorial.showWorkShiftManagerTurorial(ManageCalendar.this, WorkshiftManagerTutorial.ADD_OVERTIME);
+            }
+            if (STARLING.equalsIgnoreCase(useCaseCalling)) {
+                WorkshiftManagerTutorial.showWorkShiftManagerTurorial(ManageCalendar.this, WorkshiftManagerTutorial.STARLING_HOURS);
+            }
+            if (DISPLAY_WEEK.equalsIgnoreCase(useCaseCalling)) {
+                WorkshiftManagerTutorial.showWorkShiftManagerTurorial(ManageCalendar.this, "");
+            }
         }
 
 

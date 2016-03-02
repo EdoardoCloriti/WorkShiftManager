@@ -15,7 +15,7 @@ import com.cloriti.workshiftmanager.util.db.AccessToDB;
 public class WorkshiftManagerTutorial {
 
     public static final String WORK_SHIFT_MANAGER = "WorkShiftManager";
-    public static final String WORK_SHFIT_MANAGER_SETTING = "WorkShfitManagerSetting";
+    public static final String WORK_SHFIT_MANAGER_SETTING = "WorkShiftManagerSetting";
     public static final String MULTI_SELECTION_MENU = "MultiSelectionMenu";
     public static final String MANAGE_WORKSHIFT = "ManageWorkshift";
     public static final String ADD_OVERTIME = "AddOvertime";

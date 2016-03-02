@@ -208,7 +208,7 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_help) {
-            WorkshiftManagerTutorial.showWorkShiftManagerTurorial(WorkShiftManagerSetting.this, "WorkShiftManagerSetting");
+            WorkshiftManagerTutorial.showWorkShiftManagerTurorial(WorkShiftManagerSetting.this, WorkshiftManagerTutorial.WORK_SHFIT_MANAGER_SETTING);
         }
         return super.onOptionsItemSelected(item);
     }
