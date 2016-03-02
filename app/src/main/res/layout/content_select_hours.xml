@@ -52,24 +52,6 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/textView2" />
 
-        <Button
-            android:id="@+id/submit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/fine"
-            android:text="@string/submit_upper" />
-
-        <Button
-            android:id="@+id/back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/submit"
-            android:text="@string/back_upper" />
-
         <TimePicker
             android:id="@+id/fine"
             android:layout_width="wrap_content"

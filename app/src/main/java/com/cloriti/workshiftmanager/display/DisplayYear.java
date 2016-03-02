@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.cloriti.workshiftmanager.R;
@@ -28,6 +27,7 @@ public class DisplayYear extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_year);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
         toolbar.setTitle(R.string.title_app_upper);
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_48dp);
@@ -37,7 +37,6 @@ public class DisplayYear extends AppCompatActivity {
                 finish();
             }
         });
-        setSupportActionBar(toolbar);
 
         AccessToDB db = new AccessToDB();
         List<Week> month = null;
@@ -140,17 +139,6 @@ public class DisplayYear extends AppCompatActivity {
         oreDicembre.setText(calculateHour(month));
         straordinariDicembre.setText(calculateOvertime(month));
         month = null;
-
-        Button backButton = (Button) findViewById(R.id.back);
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                finish();
-
-            }
-        });
     }
 
     private String calculateHour(List<Week> month) {

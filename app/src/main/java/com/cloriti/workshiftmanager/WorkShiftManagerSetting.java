@@ -40,14 +40,12 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                close();
             }
         });
 
         AccessToDB db = new AccessToDB();
         m = new Intent(getApplicationContext(), MultiSelectionMenu.class);
-        Button submit = (Button) findViewById(R.id.submit);
-        Button back = (Button) findViewById(R.id.back);
 
         CheckBox notify = (CheckBox) findViewById(R.id.notify);
         notify.setOnCheckedChangeListener(null);
@@ -102,66 +100,59 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
 
         setStateOre(db);
         setStateNotify(db);
-        submit.setOnClickListener(new View.OnClickListener() {
+    }
 
-            @Override
-            public void onClick(View v) {
-                EditText oreContratto = (EditText) findViewById(R.id.ore);
-                CheckBox notify = (CheckBox) findViewById(R.id.notify);
-                boolean check = true;
-                String ore = oreContratto.getText().toString();
-                AccessToDB db = new AccessToDB();
-                if (ore.length() == 2 || ore.length() == 1) {
-                    Property oreSettimanali = new Property();
-                    oreSettimanali.setProperty(Property.ORESETTIMANALI);
-                    oreSettimanali.setValue(ore);
-                    db.insertProperty(oreSettimanali, getApplicationContext());
-                } else {
-                    check = false;
-                }
+    private void submit() {
+        EditText oreContratto = (EditText) findViewById(R.id.ore);
+        CheckBox notify = (CheckBox) findViewById(R.id.notify);
+        boolean check = true;
+        String ore = oreContratto.getText().toString();
+        AccessToDB db = new AccessToDB();
+        if (ore.length() == 2 || ore.length() == 1) {
+            Property oreSettimanali = new Property();
+            oreSettimanali.setProperty(Property.ORESETTIMANALI);
+            oreSettimanali.setValue(ore);
+            db.insertProperty(oreSettimanali, getApplicationContext());
+        } else {
+            check = false;
+        }
 
-                manageNotify(notify, db);
+        manageNotify(notify, db);
 
-                if (check) {
-                    if (db.getProperty(Property.READYTOGO, getApplicationContext()) == null) {
-                        Property ready = new Property();
-                        ready.setProperty(Property.READYTOGO);
-                        ready.setValue("true");
-                        db.insertProperty(ready, getApplicationContext());
-                        startActivity(m);
-                        finish();
-                    } else {
-                        Property ready = new Property();
-                        ready.setProperty(Property.READYTOGO);
-                        ready.setValue("true");
-                        db.insertProperty(ready, getApplicationContext());
-                        startActivity(m);
-                        finish();
-                    }
-                } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(WorkShiftManagerSetting.this);
-                    builder.setTitle(getApplicationContext().getString(R.string.title_activity_select_hours));
-                    builder.setMessage("Impostazioni non valide, ore settimanali obbligatorie");
-                    builder.setIcon(R.drawable.ic_error_black_48dp);
-                    builder.setPositiveButton(getApplicationContext().getString(R.string.msg_ok), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                    AlertDialog d = builder.create();
-                    d.show();
-                }
+        if (check) {
+            if (db.getProperty(Property.READYTOGO, getApplicationContext()) == null) {
+                Property ready = new Property();
+                ready.setProperty(Property.READYTOGO);
+                ready.setValue("true");
+                db.insertProperty(ready, getApplicationContext());
+                startActivity(m);
+                close();
+            } else {
+                Property ready = new Property();
+                ready.setProperty(Property.READYTOGO);
+                ready.setValue("true");
+                db.insertProperty(ready, getApplicationContext());
+                startActivity(m);
+                close();
             }
-        });
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(WorkShiftManagerSetting.this);
+            builder.setTitle(getApplicationContext().getString(R.string.title_activity_select_hours));
+            builder.setMessage("Impostazioni non valide, ore settimanali obbligatorie");
+            builder.setIcon(R.drawable.ic_error_black_48dp);
+            builder.setPositiveButton(getApplicationContext().getString(R.string.msg_ok), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            AlertDialog d = builder.create();
+            d.show();
+        }
+    }
 
-        back.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+    private void close() {
+        finish();
     }
 
     private void setStateOre(AccessToDB db) {
@@ -231,9 +222,14 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        switch (id) {
+            case R.id.action_help:
+                WorkshiftManagerTutorial.showWorkShiftManagerTurorial(WorkShiftManagerSetting.this, WorkshiftManagerTutorial.WORK_SHFIT_MANAGER_SETTING);
+                break;
+            case R.id.action_submit:
+                submit();
+                break;
 
-        if (id == R.id.action_help) {
-            WorkshiftManagerTutorial.showWorkShiftManagerTurorial(WorkShiftManagerSetting.this, WorkshiftManagerTutorial.WORK_SHFIT_MANAGER_SETTING);
         }
         return super.onOptionsItemSelected(item);
     }

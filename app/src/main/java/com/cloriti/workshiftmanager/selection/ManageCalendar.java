@@ -46,6 +46,7 @@ public class ManageCalendar extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_calendar);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
         toolbar.setTitle(R.string.title_app_upper);
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_48dp);
@@ -55,7 +56,7 @@ public class ManageCalendar extends AppCompatActivity {
                 finish();
             }
         });
-        setSupportActionBar(toolbar);
+
 
         Bundle inputParam = this.getIntent().getExtras();
         useCaseCalling = inputParam.getString("USE_CASE");
@@ -64,7 +65,6 @@ public class ManageCalendar extends AppCompatActivity {
             finish();
         }
         CalendarView calendar = (CalendarView) findViewById(R.id.calendar);
-        Button back = (Button) findViewById(R.id.back);
 
         setCalendar(calendar);
 
@@ -127,15 +127,6 @@ public class ManageCalendar extends AppCompatActivity {
                     i.putExtra("YEAR", year);
                     startActivity(i);
                 }
-            }
-        });
-
-
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                finish();
             }
         });
     }

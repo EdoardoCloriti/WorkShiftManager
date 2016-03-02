@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.cloriti.workshiftmanager.R;
@@ -26,6 +25,7 @@ public class DisplayMounth extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_mounth);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         toolbar.setTitle(R.string.title_app_upper);
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_48dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -34,25 +34,16 @@ public class DisplayMounth extends AppCompatActivity {
                 finish();
             }
         });
-        setSupportActionBar(toolbar);
 
         Bundle input = this.getIntent().getExtras();
         int month = input.getInt("MONTH");
         int year = input.getInt("YEAR");
-        Button back = (Button) findViewById(R.id.back);
         TextView meseAttuale = (TextView) findViewById(R.id.mese_attuale);
         TextView ore = (TextView) findViewById(R.id.ore);
         TextView straordinari = (TextView) findViewById(R.id.straordinari);
         meseAttuale.setText(new DateFormatSymbols().getMonths()[month - 1] + " " + year);
         ore.setText(calculateHour(month, year));
         straordinari.setText(calculateOvertime(month, year));
-        back.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 
     private String calculateHour(int mounth, int year) {

@@ -14,7 +14,7 @@
     tools:showIn="@layout/activity_create_work_shift">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="500sp">
+        android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/title_add_turn_menu"
@@ -52,31 +52,5 @@
         android:layout_below="@+id/inserisci_pomeriggio"
         android:checked="false"
         android:text="@string/importante" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/submit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/priority"
-                android:layout_marginTop="37dp"
-                android:text="@string/submit_upper" />
-
-            <Button
-                android:id="@+id/back"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentStart="true"
-                android:text="@string/back_upper" />
-        </LinearLayout>
     </RelativeLayout>
 </ScrollView>

@@ -9,7 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -24,6 +23,7 @@ import java.util.Calendar;
 public class SelectHours extends AppCompatActivity {
 
     private Intent outputIntent = null;
+    private String h;
 
 
     @Override
@@ -31,6 +31,7 @@ public class SelectHours extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_hours);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
         toolbar.setTitle(R.string.title_app_upper);
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_48dp);
@@ -40,16 +41,13 @@ public class SelectHours extends AppCompatActivity {
                 finish();
             }
         });
-        setSupportActionBar(toolbar);
 
         Bundle bundle = this.getIntent().getExtras();
         outputIntent = new Intent(getApplicationContext(), CreateWorkShift.class);
-        final String h = bundle.getString("part-of-day");
+        h = bundle.getString("part-of-day");
         final TextView titleOriario = (TextView) findViewById(R.id.title_orario);
         final TimePicker orarioInizio = (TimePicker) findViewById(R.id.inizio);
         final TimePicker orarioFine = (TimePicker) findViewById(R.id.fine);
-        Button submit = (Button) findViewById(R.id.submit);
-        Button back = (Button) findViewById(R.id.back);
         //CheckBox importante = (CheckBox) findViewById(R.id.riunione);
         outputIntent.putExtra("priority", false);
         orarioInizio.setIs24HourView(false);
@@ -70,39 +68,28 @@ public class SelectHours extends AppCompatActivity {
             // per cui gli unici valorei possibili sono 'am' || 'pm'
             throw new RuntimeException("part of the day does not exist, can not continue");
         }
+    }
 
-        submit.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                TimePicker orarioInizio = (TimePicker) findViewById(R.id.inizio);
-                TimePicker orarioFine = (TimePicker) findViewById(R.id.fine);
-                Integer hourStart = orarioInizio.getHour();
-                Integer minuteStart = orarioInizio.getMinute();
-                Integer hourFinish = orarioFine.getHour();
-                Integer minuteFinish = orarioFine.getMinute();
-                outputIntent.putExtra(IDs.PART_OF_DAY, h);
-                String am = manageAM(hourStart, minuteStart, hourFinish, minuteFinish);
-                String pm = managePM(hourStart, minuteStart, hourFinish, minuteFinish);
-                if ("am".equalsIgnoreCase(h) && am != null) {
-                    outputIntent.putExtra(IDs.ORARIO_MATTINA, am);
-                    setResult(2, outputIntent);
-                    finish();
-                } else if ("pm".equalsIgnoreCase(h) && pm != null) {
-                    outputIntent.putExtra(IDs.ORARIO_POMERIGGIO, pm);
-                    setResult(2, outputIntent);
-                    finish();
-                } else
-                    alert();
-            }
-        });
-        back.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+    private void submit() {
+        TimePicker orarioInizio = (TimePicker) findViewById(R.id.inizio);
+        TimePicker orarioFine = (TimePicker) findViewById(R.id.fine);
+        Integer hourStart = orarioInizio.getHour();
+        Integer minuteStart = orarioInizio.getMinute();
+        Integer hourFinish = orarioFine.getHour();
+        Integer minuteFinish = orarioFine.getMinute();
+        outputIntent.putExtra(IDs.PART_OF_DAY, h);
+        String am = manageAM(hourStart, minuteStart, hourFinish, minuteFinish);
+        String pm = managePM(hourStart, minuteStart, hourFinish, minuteFinish);
+        if ("am".equalsIgnoreCase(h) && am != null) {
+            outputIntent.putExtra(IDs.ORARIO_MATTINA, am);
+            setResult(2, outputIntent);
+            finish();
+        } else if ("pm".equalsIgnoreCase(h) && pm != null) {
+            outputIntent.putExtra(IDs.ORARIO_POMERIGGIO, pm);
+            setResult(2, outputIntent);
+            finish();
+        } else
+            alert();
     }
 
     /*
@@ -123,7 +110,7 @@ public class SelectHours extends AppCompatActivity {
     private String managePM(Integer hourStart, Integer minuteStart, Integer hourFinish, Integer minuteFinish) {
         if (!validatTimetable(hourStart, minuteStart, hourFinish, minuteFinish))
             return null;
-        else if (!validateStartHour("am", hourStart))
+        else if (!validateStartHour("pm", hourStart))
             return null;
         else
             return (hourStart + ":" + minuteStart) + "-" + (hourFinish + ":" + minuteFinish);
@@ -185,13 +172,17 @@ public class SelectHours extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent i = new Intent(getApplicationContext(), WorkShiftManagerSetting.class);
-            startActivity(i);
-        }
-        if (id == R.id.action_help) {
-            WorkshiftManagerTutorial.showWorkShiftManagerTurorial(SelectHours.this, "CreateWorkShift");
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent i = new Intent(getApplicationContext(), WorkShiftManagerSetting.class);
+                startActivity(i);
+                break;
+            case R.id.action_help:
+                WorkshiftManagerTutorial.showWorkShiftManagerTurorial(SelectHours.this, "CreateWorkShift");
+                break;
+            case R.id.action_submit:
+                submit();
+                break;
         }
 
 

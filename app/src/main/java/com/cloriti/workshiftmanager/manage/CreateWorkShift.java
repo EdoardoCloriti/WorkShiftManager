@@ -39,23 +39,23 @@ public class CreateWorkShift extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_work_shift);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
         toolbar.setTitle(R.string.title_app_upper);
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_48dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                close();
             }
         });
-        setSupportActionBar(toolbar);
+
 
         final Bundle inputBundle = this.getIntent().getExtras();
         TextView title = (TextView) findViewById(R.id.title_add_turn_menu);
         Button insertMattina = (Button) findViewById(R.id.inserisci_mattina);
         Button insertPomeriggio = (Button) findViewById(R.id.inserisci_pomeriggio);
-        Button submit = (Button) findViewById(R.id.submit);
-        Button back = (Button) findViewById(R.id.back);
+
         // gestione del titolo della pagina -> default senza data... inserimento della data di riferimento
         turn.setDatariferimento(inputBundle.getString(IDs.DATA));
         turn.setWeekId(inputBundle.getInt(IDs.WEEK_ID));
@@ -84,34 +84,27 @@ public class CreateWorkShift extends AppCompatActivity {
                 startActivityForResult(selectTurnCalendar, 2);
             }
         });
+    }
 
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CheckBox priority = (CheckBox) findViewById(R.id.priority);
-                turn.setIsImportante(priority.isChecked());
-                turn.setHour();
-                AccessToDB db = new AccessToDB();
-                db.insertTurn(turn, getApplicationContext());
-                if (db.existPropery(Property.NOTIFICA, getApplicationContext()) != 0) {
-                    if (!isNull(turn.getInizioMattina()))
-                        generateRememberNotify(turn.getInizioMattinaH(), turn.getInizioMattinaM(), turn.getDataRierimentoDateStr());
-                    if (!isNull(turn.getInizioPomeriggio()))
-                        generateRememberNotify(turn.getInizioPomeriggioH(), turn.getInizioPomeriggioM(), turn.getDataRierimentoDateStr());
-                }
-                turn = null;
-                finish();
-            }
-        });
-        // gestione del tasto back
-        back.setOnClickListener(new View.OnClickListener() {
+    private void close() {
+        turn = null;
+        finish();
+    }
 
-            @Override
-            public void onClick(View v) {
-                turn = null;
-                finish();
-            }
-        });
+    private void submit() {
+        CheckBox priority = (CheckBox) findViewById(R.id.priority);
+        turn.setIsImportante(priority.isChecked());
+        turn.setHour();
+        AccessToDB db = new AccessToDB();
+        db.insertTurn(turn, getApplicationContext());
+        if (db.existPropery(Property.NOTIFICA, getApplicationContext()) != 0) {
+            if (!isNull(turn.getInizioMattina()))
+                generateRememberNotify(turn.getInizioMattinaH(), turn.getInizioMattinaM(), turn.getDataRierimentoDateStr());
+            if (!isNull(turn.getInizioPomeriggio()))
+                generateRememberNotify(turn.getInizioPomeriggioH(), turn.getInizioPomeriggioM(), turn.getDataRierimentoDateStr());
+        }
+        turn = null;
+        finish();
     }
 
     @Override
@@ -180,17 +173,21 @@ public class CreateWorkShift extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent i = new Intent(getApplicationContext(), WorkShiftManagerSetting.class);
-            startActivity(i);
-        }
-        if (id == R.id.action_help) {
-            WorkshiftManagerTutorial.showWorkShiftManagerTurorial(CreateWorkShift.this, "CreateWorkShift");
-        }
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent i = new Intent(getApplicationContext(), WorkShiftManagerSetting.class);
+                startActivity(i);
+                break;
+            case R.id.action_help:
+                WorkshiftManagerTutorial.showWorkShiftManagerTurorial(CreateWorkShift.this, "CreateWorkShift");
+                break;
+            case R.id.action_submit:
+                submit();
+                break;
 
+        }
 
         return super.onOptionsItemSelected(item);
     }

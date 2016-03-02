@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -26,15 +25,15 @@ public class DisplayTurn extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_turn);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         toolbar.setTitle(R.string.title_app_upper);
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_48dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                close();
             }
         });
-        setSupportActionBar(toolbar);
 
         final Bundle inputBundle = this.getIntent().getExtras();
         String selectedDay = inputBundle.getString("SELECTED_DAY");
@@ -52,8 +51,6 @@ public class DisplayTurn extends AppCompatActivity {
         TextView importante = (TextView) findViewById(R.id.importante);
         TextView overValue = (TextView) findViewById(R.id.overvalue);
         TextView orevalue = (TextView) findViewById(R.id.orevalue);
-
-        Button back = (Button) findViewById(R.id.back);
 
         title.setText(turn.getDatariferimento());
 
@@ -81,19 +78,15 @@ public class DisplayTurn extends AppCompatActivity {
         } else {
             importante.setTextColor(getResources().getColor(R.color.transparent));
         }
-        back.setOnClickListener(new View.OnClickListener() {
+    }
 
-            @Override
-            public void onClick(View v) {
-                CheckBox cancella = (CheckBox) findViewById(R.id.delete);
-                if (cancella.isChecked()) {
-                    AccessToDB db = new AccessToDB();
-                    db.deleteTurnAndUpdateWeek(turn, getApplicationContext());
-                }
-                finish();
-
-            }
-        });
+    private void close() {
+        CheckBox cancella = (CheckBox) findViewById(R.id.delete);
+        if (cancella.isChecked()) {
+            AccessToDB db = new AccessToDB();
+            db.deleteTurnAndUpdateWeek(turn, getApplicationContext());
+        }
+        finish();
     }
 
     private boolean isNull(String value1, String value2) {

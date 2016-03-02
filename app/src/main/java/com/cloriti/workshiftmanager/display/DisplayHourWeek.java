@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.cloriti.workshiftmanager.R;
@@ -23,6 +22,7 @@ public class DisplayHourWeek extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_hour_week);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         toolbar.setTitle(R.string.title_app_upper);
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_48dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -31,7 +31,6 @@ public class DisplayHourWeek extends AppCompatActivity {
                 finish();
             }
         });
-        setSupportActionBar(toolbar);
 
         AccessToDB db = new AccessToDB();
         Bundle input = getIntent().getExtras();
@@ -40,7 +39,7 @@ public class DisplayHourWeek extends AppCompatActivity {
         Week week = db.getWeeekByCorrelationId(year, mounth, getApplicationContext());
         TextView ore = (TextView) findViewById(R.id.ore);
         TextView straordinari = (TextView) findViewById(R.id.straordinari);
-        Button back = (Button) findViewById(R.id.back);
+
         if (week != null) {
             CharSequence oreCs = new Double(week.getHour()).toString();
             CharSequence straordinariCs = new Double(week.getExtraHour()).toString();
@@ -52,13 +51,6 @@ public class DisplayHourWeek extends AppCompatActivity {
             ore.setText(oreCs);
             straordinari.setText(straordinariCs);
         }
-
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 
     @Override

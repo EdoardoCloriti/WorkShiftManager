@@ -45,7 +45,6 @@ public class MultiSelectionMenu extends AppCompatActivity {
         Button manageWorkShift = (Button) findViewById(R.id.insertT);
         Button displayTurn = (Button) findViewById(R.id.visualTurn);
         Button addOvertime = (Button) findViewById(R.id.addextraordinary);
-        Button back = (Button) findViewById(R.id.backbutton);
         Button displayMounth = (Button) findViewById(R.id.displayH);
         Button displayYear = (Button) findViewById(R.id.displayY);
         Button displayOreSettimali = (Button) findViewById(R.id.oreSettimanali);
@@ -59,15 +58,6 @@ public class MultiSelectionMenu extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), ManageCalendar.class);
                 i.putExtra("USE_CASE", "ManageWorkShift");
                 startActivity(i);
-            }
-        });
-
-        back.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                finish();
-
             }
         });
 
@@ -178,14 +168,16 @@ public class MultiSelectionMenu extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent i = new Intent(getApplicationContext(), WorkShiftManagerSetting.class);
-            startActivity(i);
-        }
-        if (id == R.id.action_help) {
-            WorkshiftManagerTutorial.showWorkShiftManagerTurorial(MultiSelectionMenu.this, "MultiSelectionMenu");
-        }
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent i = new Intent(getApplicationContext(), WorkShiftManagerSetting.class);
+                startActivity(i);
+                break;
 
+            case R.id.action_help:
+                WorkshiftManagerTutorial.showWorkShiftManagerTurorial(MultiSelectionMenu.this, "MultiSelectionMenu");
+                break;
+        }
 
         return super.onOptionsItemSelected(item);
     }

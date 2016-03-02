@@ -46,15 +46,6 @@
             android:text=""
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <Button
-            android:id="@+id/back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/iniziopomevalue"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:text="@string/back_upper" />
-
         <TextView
             android:id="@+id/mattina"
             android:layout_width="wrap_content"
