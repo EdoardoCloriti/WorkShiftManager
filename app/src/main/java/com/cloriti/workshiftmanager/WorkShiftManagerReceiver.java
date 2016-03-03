@@ -10,7 +10,9 @@ import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 
 /**
- * Created by Edoardo on 29/02/2016.
+ * Classe per Ricevere le Notifiche dell'applicazione
+ *
+ * @Author edoardo.cloriti@studio.unibo.it
  */
 public class WorkShiftManagerReceiver extends BroadcastReceiver {
 
