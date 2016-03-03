@@ -161,8 +161,7 @@ public class ManageCalendar extends AppCompatActivity {
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(day.getTime());
                     int mounth = cal.get(Calendar.WEEK_OF_YEAR);
-                    //TODO:cambiare le key dei parametri
-                    i.putExtra("MOUNTH", mounth);
+                    i.putExtra("WEEK_ID", mounth);
                     i.putExtra("YEAR", year);
                     startActivity(i);
                 }

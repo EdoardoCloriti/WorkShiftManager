@@ -43,7 +43,7 @@ public class DisplayHourWeek extends AppCompatActivity {
         AccessToDB db = new AccessToDB();
         //estrazione dei dati passati in input dall'activity chiamante tramite l'intent
         Bundle input = getIntent().getExtras();
-        int mounth = input.getInt("MOUNTH");
+        int mounth = input.getInt("WEEK_ID");
         int year = input.getInt("YEAR");
         //recuper la settimana tramite il correlation id (year-weekID)
         Week week = db.getWeeekByCorrelationId(year, mounth, getApplicationContext());
