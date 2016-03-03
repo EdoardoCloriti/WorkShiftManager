@@ -4,6 +4,12 @@ import android.content.Context;
 
 import com.cloriti.workshiftmanager.util.db.AccessToDB;
 
+/**
+ * Classe per contenere i dati relativi alle ore ed
+ * agli straordinari relativi alla settimana
+ *
+ * @Author edoardo.cloriti@studio.unibo.it
+ */
 public class Week {
     private int id;
     private int weekId;
