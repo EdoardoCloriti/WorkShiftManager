@@ -16,6 +16,12 @@ import com.cloriti.workshiftmanager.util.Turn;
 import com.cloriti.workshiftmanager.util.db.AccessToDB;
 import com.cloriti.workshiftmanager.util.tutorial.WorkshiftManagerTutorial;
 
+/**
+ * Activity per la visualizzazione del turno registrato in una determinata data
+ * è possibile anche eliminare il turno
+ *
+ * @Athor edoardo.cloriti@studio.unibo.it
+ */
 public class DisplayTurn extends AppCompatActivity {
 
     private Turn turn = null;
@@ -24,10 +30,12 @@ public class DisplayTurn extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_turn);
+        //Gestione della toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.title_app_upper);
         toolbar.setLogo(R.mipmap.ic_launcher);
         setSupportActionBar(toolbar);
+        //Gestione del navigation Button della toolbar
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_48dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,9 +44,11 @@ public class DisplayTurn extends AppCompatActivity {
             }
         });
 
+        //recupero la data passata in input tramite l'intent creato dal chiamante
         final Bundle inputBundle = this.getIntent().getExtras();
         String selectedDay = inputBundle.getString("SELECTED_DAY");
         AccessToDB db = new AccessToDB();
+        //recupero il turno dal DB tramite la data
         turn = db.getTurnBySelectedDay(selectedDay, getApplicationContext());
 
         TextView title = (TextView) findViewById(R.id.title);
@@ -55,6 +65,7 @@ public class DisplayTurn extends AppCompatActivity {
 
         title.setText(turn.getDatariferimento());
 
+        //Controllo se è settato è presente un turno di mattina altrimenti lo setto "Di Riposo"
         if (turn.getInizioMattina() != null && turn.getFineMattina() != null && !isNull(turn.getInizioMattina(), turn.getFineMattina())) {
             inizioMattina.setText(turn.getInizioMattina());
             fineMattina.setText(turn.getFineMattina());
@@ -63,6 +74,7 @@ public class DisplayTurn extends AppCompatActivity {
             fineMattina.setText(R.string.riposo);
         }
 
+        //Controllo se è settato è presente un turno di pomeriggio altrimenti lo setto "Di Riposo
         if (turn.getInizioPomeriggio() != null && turn.getFinePomeriggio() != null && !isNull(turn.getInizioPomeriggio(), turn.getFinePomeriggio())) {
             inizioPomeriggio.setText(turn.getInizioPomeriggio());
             finePomeriggio.setText(turn.getFinePomeriggio());
@@ -71,9 +83,11 @@ public class DisplayTurn extends AppCompatActivity {
             finePomeriggio.setText(R.string.riposo);
         }
 
+        //estraggo le date e le scrivo
         orevalue.setText(Double.toString(turn.getHour()));
         overValue.setText(Double.toString(turn.getOvertime()));
 
+        //controllo sull'importanza alla giornate , se è settata appare la scritta importante in rosso altrimenti in trasparente
         if (turn.getIsImportante()) {
             importante.setTextColor(getResources().getColor(R.color.Red));
         } else {
@@ -81,6 +95,10 @@ public class DisplayTurn extends AppCompatActivity {
         }
     }
 
+    /**
+     * Durante la chiusura dell'activity si controlla se il CheckBox elimina è impostato
+     * in caso affermativo si elimina il turno dal databse aggiornando la settimana
+     */
     private void close() {
         CheckBox cancella = (CheckBox) findViewById(R.id.delete);
         if (cancella.isChecked()) {
@@ -90,6 +108,13 @@ public class DisplayTurn extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Controlla se i due valori sono nulli per l'applicazione "null:null"
+     *
+     * @param value1
+     * @param value2
+     * @return
+     */
     private boolean isNull(String value1, String value2) {
         return "null:null".equalsIgnoreCase(value1) && "null:null".equalsIgnoreCase(value2);
     }

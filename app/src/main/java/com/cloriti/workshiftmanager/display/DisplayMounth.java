@@ -18,14 +18,21 @@ import com.cloriti.workshiftmanager.util.tutorial.WorkshiftManagerTutorial;
 import java.text.DateFormatSymbols;
 import java.util.List;
 
+/**
+ * Activity per estrarre il mese passato in input e a mostrarlo all'utente
+ *
+ * @Author edoardo.cloriti@studio.unibo.it
+ */
 public class DisplayMounth extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_mounth);
+        //Gestione della toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.title_app_upper);
+        //Gestione della navigation icon
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_48dp);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -35,6 +42,7 @@ public class DisplayMounth extends AppCompatActivity {
             }
         });
 
+        //estrazione del mese e anno passato dall'activity chiamante tramite l'intent
         Bundle input = this.getIntent().getExtras();
         int month = input.getInt("MONTH");
         int year = input.getInt("YEAR");
@@ -42,10 +50,20 @@ public class DisplayMounth extends AppCompatActivity {
         TextView ore = (TextView) findViewById(R.id.ore);
         TextView straordinari = (TextView) findViewById(R.id.straordinari);
         meseAttuale.setText(new DateFormatSymbols().getMonths()[month - 1] + " " + year);
+        //setting delle ore
         ore.setText(calculateHour(month, year));
+        //setting degli straordinari
         straordinari.setText(calculateOvertime(month, year));
     }
 
+    /**
+     * Metodo per l'estrazione dal database delle settimane che fanno parte di un determinato mese
+     * associato ai parametri passati e al calcolo delle ore totali
+     *
+     * @param mounth
+     * @param year
+     * @return
+     */
     private String calculateHour(int mounth, int year) {
         AccessToDB db = new AccessToDB();
         List<Week> weeks = db.getMounth(mounth, year, getApplicationContext());
@@ -57,6 +75,14 @@ public class DisplayMounth extends AppCompatActivity {
 
     }
 
+    /**
+     * Metodo per l'estrazione dal database delle settimane che fanno parte di un determinato mese
+     * associato ai parametri passati e al calcolo degli straordinari totali
+     *
+     * @param mounth
+     * @param year
+     * @return
+     */
     private String calculateOvertime(int mounth, int year) {
         AccessToDB db = new AccessToDB();
         List<Week> weeks = db.getMounth(mounth, year, getApplicationContext());

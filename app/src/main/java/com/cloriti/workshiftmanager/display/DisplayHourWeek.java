@@ -15,16 +15,23 @@ import com.cloriti.workshiftmanager.util.Week;
 import com.cloriti.workshiftmanager.util.db.AccessToDB;
 import com.cloriti.workshiftmanager.util.tutorial.WorkshiftManagerTutorial;
 
+/**
+ * Avtivity per la visualizzazione delle ore relative alla settimana passata come parametro
+ *
+ * @Author edoardo.cloriti@studio.unibo.it
+ */
 public class DisplayHourWeek extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_hour_week);
+        //Gestione della toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.title_app_upper);
         toolbar.setLogo(R.mipmap.ic_launcher);
         setSupportActionBar(toolbar);
+        //Gestione del Navigation action
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_48dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,19 +41,23 @@ public class DisplayHourWeek extends AppCompatActivity {
         });
 
         AccessToDB db = new AccessToDB();
+        //estrazione dei dati passati in input dall'activity chiamante tramite l'intent
         Bundle input = getIntent().getExtras();
         int mounth = input.getInt("MOUNTH");
         int year = input.getInt("YEAR");
+        //recuper la settimana tramite il correlation id (year-weekID)
         Week week = db.getWeeekByCorrelationId(year, mounth, getApplicationContext());
         TextView ore = (TextView) findViewById(R.id.ore);
         TextView straordinari = (TextView) findViewById(R.id.straordinari);
 
         if (week != null) {
+            //nel caso in cui il Db abbia estratto qualcosa setta le ore e gli straordinari
             CharSequence oreCs = new Double(week.getHour()).toString();
             CharSequence straordinariCs = new Double(week.getExtraHour()).toString();
             ore.setText(oreCs);
             straordinari.setText(straordinariCs);
         } else {
+            //nel caso non sia registrata nessuna settimana si setta ore e straordinari a 0
             CharSequence oreCs = new Double(0).toString();
             CharSequence straordinariCs = new Double(0).toString();
             ore.setText(oreCs);
