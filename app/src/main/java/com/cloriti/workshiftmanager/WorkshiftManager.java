@@ -23,6 +23,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Activity Main dell'applicazione serve come Home page di ingresso e controllo del primo accesso,
+ * delle notifiche giornaliere e della pulizia dei dati annule
+ *
+ * @Author edoardo.cloriti@studio.unibo.it
+ */
 public class WorkshiftManager extends AppCompatActivity {
 
     private final static String PATTERN = "dd/MM/yyyy";
@@ -47,6 +53,7 @@ public class WorkshiftManager extends AppCompatActivity {
         // creazione del button di ingresso dell'appicazione
         Button startButton = (Button) findViewById(R.id.startbutton);
 
+        //Controllo se oggi è il gionro della pulizia dello storico dati
         Calendar sysCalendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat(PATTERN);
         try {
@@ -56,10 +63,11 @@ public class WorkshiftManager extends AppCompatActivity {
                 AccessToDB db = new AccessToDB();
                 int year = sysCalendar.get(Calendar.YEAR);
                 int yearAnnual = sysCalendar.get(Calendar.YEAR) - 1;
-                int yearBiannual = sysCalendar.get(Calendar.YEAR) - 2;
+                int yearBiannual = sysCalendar.get(Calendar.YEAR) - 1;
+                //in caso il controllo restituisce esito positivo chiamo le funzionalita di pulizia dei dati
                 db.clearTurnByYear(yearAnnual, getApplicationContext());
                 db.cleanWeekByYearToYear(yearBiannual, year, getApplicationContext());
-                Toast.makeText(getApplicationContext(), "Effettuata pulizia annuale di turni", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Effettuata pulizia annuale dei dati", Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "Impossibile Effettuare la  pulizia annuale di turni", Toast.LENGTH_LONG).show();
@@ -93,6 +101,7 @@ public class WorkshiftManager extends AppCompatActivity {
                 Intent multiSelectionMenu = new Intent(getApplicationContext(), MultiSelectionMenu.class);
                 Intent applicationSetting = new Intent(getApplicationContext(), WorkShiftManagerSetting.class);
 
+                //controllo se è la prima volta che si esegue l'accesso, in tal caso si viene reindirizzati alla selezione delle configurazioni
                 AccessToDB db = new AccessToDB();
                 if (db.getProperty(Property.READYTOGO, getApplicationContext()) == null) {
                     startActivity(applicationSetting);
@@ -106,6 +115,7 @@ public class WorkshiftManager extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+                //Si esegue la chiusura dell'applicazione
                 android.os.Process.killProcess(android.os.Process.myPid());
             }
         });

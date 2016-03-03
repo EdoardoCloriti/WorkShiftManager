@@ -23,19 +23,26 @@ import com.cloriti.workshiftmanager.util.notification.WorkShiftManagerAlarmServi
 import com.cloriti.workshiftmanager.util.notification.WorkShiftManagerNotificationService;
 import com.cloriti.workshiftmanager.util.tutorial.WorkshiftManagerTutorial;
 
+/**
+ * Activity per la Gestione delle impostazioni della Apllicazione
+ *
+ * @Author edoardo.cloriti@studio.unibo.it
+ */
 public class WorkShiftManagerSetting extends AppCompatActivity {
 
-    private Dialog d;
+    private Dialog selectMinuteToNotfiedDialog;
     private Intent m = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_shift_manager_setting);
+        //Setting delle impostazioni della Action Bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
         toolbar.setTitle(R.string.title_app_upper);
         setSupportActionBar(toolbar);
+        //setting del navigation button per tornare indietro
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_48dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,9 +51,12 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
             }
         });
 
+        //Creazione dell'intent verso MultiSelectionMenu
         AccessToDB db = new AccessToDB();
         m = new Intent(getApplicationContext(), MultiSelectionMenu.class);
 
+        //Gestione della spunta del CheckBox per le notifiche, in caso venga stuntato deve apparire un Pop-up per la selezione
+        //di minuti di anticipo con cui inviare la notifica
         CheckBox notify = (CheckBox) findViewById(R.id.notify);
         notify.setOnCheckedChangeListener(null);
         if (db.existPropery(Property.NOTIFICA, getApplicationContext()) != 0) {
@@ -56,41 +66,45 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
                 notify.setChecked(false);
         }
 
+        //Setting del listener per il CheckBox notify
         notify.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
 
                 if (isChecked) {
-                    d = new Dialog(WorkShiftManagerSetting.this);
-                    d.setTitle("Prova");
-                    d.setContentView(R.layout.dialog_notify_min);
-                    d.show();
-                    Button submit = (Button) d.findViewById(R.id.submit_dialog);
-                    Button back = (Button) d.findViewById(R.id.back_dialog);
-                    submit.setOnClickListener(new View.OnClickListener() {
+                    //Gestione dei dialog per l'immissione dei minuti quando il listener si accorge che viene spuntato il CheckBox
+                    selectMinuteToNotfiedDialog = new Dialog(WorkShiftManagerSetting.this);
+                    selectMinuteToNotfiedDialog.setContentView(R.layout.dialog_notify_min);
+                    selectMinuteToNotfiedDialog.show();
+                    Button submitDialog = (Button) selectMinuteToNotfiedDialog.findViewById(R.id.submit_dialog);
+                    Button backDialog = (Button) selectMinuteToNotfiedDialog.findViewById(R.id.back_dialog);
+                    submitDialog.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            //Alla pressione del tasto 'CONFERMA' del dialog si gestisce l'inserimento dei minuti sul DB
                             AccessToDB db = new AccessToDB();
-                            EditText minuti = (EditText) d.findViewById(R.id.minuti);
+                            EditText minuti = (EditText) selectMinuteToNotfiedDialog.findViewById(R.id.minuti);
                             String min = minuti.getText().toString();
+                            //Creazione della Property da Inserire
                             Property p = new Property();
                             p.setProperty(Property.NOTIFICA_MIN);
                             p.setValue(min);
                             db.insertProperty(p, getApplicationContext());
-                            d.dismiss();
+                            selectMinuteToNotfiedDialog.dismiss();
                         }
                     });
 
-                    back.setOnClickListener(new View.OnClickListener() {
+                    backDialog.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            //Se viene premuto il tasto back si inserisce una Property di Default che corrisponde a 30 minuti
                             AccessToDB db = new AccessToDB();
                             Property p = new Property();
                             p.setProperty(Property.NOTIFICA_MIN);
                             p.setValue("30");
                             db.insertProperty(p, getApplicationContext());
-                            d.dismiss();
+                            selectMinuteToNotfiedDialog.dismiss();
                         }
                     });
                 }
@@ -102,24 +116,30 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
         setStateNotify(db);
     }
 
+    /**
+     * metodo per la Gestione al momento della perssione sul tasto Submit
+     * valida e inserisce le ore-settimanali immesse, incaso siano in un formato errato o non siano
+     * mostra un Dialog di Errore, Gestisce e inserisce la CheckBox della Notifica
+     */
     private void submit() {
         EditText oreContratto = (EditText) findViewById(R.id.ore);
         CheckBox notify = (CheckBox) findViewById(R.id.notify);
         boolean check = true;
         String ore = oreContratto.getText().toString();
         AccessToDB db = new AccessToDB();
+
+        //Validazione delle ore-settimanali immese
         if (ore.length() == 2 || ore.length() == 1) {
-            Property oreSettimanali = new Property();
-            oreSettimanali.setProperty(Property.ORESETTIMANALI);
-            oreSettimanali.setValue(ore);
-            db.insertProperty(oreSettimanali, getApplicationContext());
+            check = true;
         } else {
             check = false;
         }
 
-        manageNotify(notify, db);
-
+        //se la validazione delle ore settimanali immesse passa la validazione si può procede con l'inserimento
         if (check) {
+            manageNotify(notify, db);
+            insertWeeklyHours(ore, db);
+            //controlla se esite la Property su DB che flegga il primo accesso e la Aggiorna
             if (db.getProperty(Property.READYTOGO, getApplicationContext()) == null) {
                 Property ready = new Property();
                 ready.setProperty(Property.READYTOGO);
@@ -136,6 +156,7 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
                 close();
             }
         } else {
+            //Se non vengono passati i controlli di validotà dell'orario si crea una  Dialog per notificare l'errore
             AlertDialog.Builder builder = new AlertDialog.Builder(WorkShiftManagerSetting.this);
             builder.setTitle(getApplicationContext().getString(R.string.title_activity_select_hours));
             builder.setMessage("Impostazioni non valide, ore settimanali obbligatorie");
@@ -151,10 +172,32 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
         }
     }
 
+    /**
+     * Metodo per l'inserimento delle ore settimanali
+     *
+     * @param ore
+     * @param db
+     */
+    private void insertWeeklyHours(String ore, AccessToDB db) {
+        Property oreSettimanali = new Property();
+        oreSettimanali.setProperty(Property.ORESETTIMANALI);
+        oreSettimanali.setValue(ore);
+        db.insertProperty(oreSettimanali, getApplicationContext());
+    }
+
+    /**
+     * Metodo per la gestione della pressione del Button Back
+     */
     private void close() {
         finish();
     }
 
+    /**
+     * Metodo per il controllo su DB se esiste la Property per le ore settimanali in caso affermativo la scrive come default
+     * nell'editText per l'inserimento delle ore
+     *
+     * @param db
+     */
     private void setStateOre(AccessToDB db) {
         EditText oreContratto = (EditText) findViewById(R.id.ore);
         if (db.existPropery(Property.ORESETTIMANALI, getApplicationContext()) != 0) {
@@ -164,7 +207,12 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Metodo per il controllo su DB sull'esistenza della Propery per le notifiche in caso affermativo
+     * setta come default il vaolre che c'è su DB
+     *
+     * @param db
+     */
     private void setStateNotify(AccessToDB db) {
         CheckBox notify = (CheckBox) findViewById(R.id.notify);
         if (db.existPropery(Property.NOTIFICA, getApplicationContext()) != 0) {
@@ -177,6 +225,13 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
             notify.setChecked(false);
     }
 
+    /**
+     * Metodo per la Gestione del CheckBox relativo alle  notifiche al momento del Submit
+     * se la Property "notify" esiste su DB ed è differente la aggiorna, altrimenti la inserisce
+     *
+     * @param notify
+     * @param db
+     */
     private void manageNotify(CheckBox notify, AccessToDB db) {
         if (notify.isChecked()) {
             Property activeNotify = new Property();
