@@ -1,13 +1,19 @@
 package com.cloriti.workshiftmanager.util;
 
+/**
+ * Classe di utility per la gestione degli ID da utilizzare nell'applicazione
+ * per l'invocazione di un activity parametrizzata
+ *
+ * @Autor edoardo.cloriti@studio.unibo.it
+ */
 public class IDs {
-    /*
+    /**
      * id per le comunicazioni tra activity
      */
     public static final int AddTurnMenu = 1;
     public static final int SelectTurn = 2;
 
-    /*
+    /**
      * id per le chiavi dei putExtra
      */
     public static final String MONTH = "month";

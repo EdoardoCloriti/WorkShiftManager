@@ -36,7 +36,12 @@ public class Turn {
 
     private boolean isImportante = false;
 
-    // costruttore con Bundle
+    /**
+     * Dato un Bundle contenente i dati per un turno restituisce un oggetto di tipo Turn con i dati settati dal Bundle
+     *
+     * @param bundle
+     * @return
+     */
     public static final Turn turnByBundle(Bundle bundle) {
         Turn turn = new Turn();
         turn.setDatariferimento(bundle.getString(IDs.DATA));
@@ -57,10 +62,13 @@ public class Turn {
         return turn;
     }
 
-    public static boolean intervalIsNotNull(String interval) {
-        return interval == null || "null:null".equals(interval) ? false : true;
-    }
-
+    /**
+     * Dato un oggetto di tipo Turn e un intent filla tutti i valori del Turn all'interno dell'intent
+     *
+     * @param i
+     * @param turn
+     * @return
+     */
     public static final Intent intentByTurn(Intent i, Turn turn) {
         i.putExtra(IDs.ID, turn.getId());
         i.putExtra(IDs.DATA, turn.getDataRierimentoDate());
@@ -77,6 +85,22 @@ public class Turn {
         return i;
     }
 
+    /**
+     * metodo per controllare che un intervallo di tempo non sia null ("null:null" || null)
+     *
+     * @param interval
+     * @return
+     */
+    public static boolean intervalIsNotNull(String interval) {
+        return interval == null || "null:null".equals(interval) ? false : true;
+    }
+
+
+    /**
+     * Controlla se il Tunr è null tramite la data di riferimento
+     *
+     * @return
+     */
     public boolean isNull() {
         if (this.datariferimento == null)
             return true;
@@ -84,29 +108,18 @@ public class Turn {
             return false;
     }
 
-    // setter
+
     public void setId(int id) {
         this.id = id;
-    }
-
-    public void setcorrelationKey(int dd, int MM, int yyyy) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(yyyy, MM, dd);
-        this.weekId = calendar.get(Calendar.WEEK_OF_YEAR);
-        this.year = yyyy;
-        this.mounth = MM;
-    }
-
-    public void setcorrelationKeyWithWeekId(int weekId, int MM, int yyyy) {
-        this.weekId = weekId;
-        this.year = yyyy;
-        this.mounth = MM;
     }
 
     public void setHour(double hour) {
         this.hour = hour;
     }
 
+    /**
+     * Metodo per settare le ore effettuate calcolandole direttamente dagli orari inseriti
+     */
     public void setHour() {
         double tmpHour = 0;
         if (inizioMattinaH != null && inizioMattinaM != null && fineMattinaH != null && fineMattinaM != null) {
@@ -163,6 +176,11 @@ public class Turn {
         return datariferimento;
     }
 
+    /**
+     * Metodo per settare la Data di Riferimento
+     *
+     * @param datariferimento
+     */
     public void setDatariferimento(String datariferimento) {
         if (year == 0)
             year = new Integer(datariferimento.substring(6, 10)).intValue();
@@ -211,32 +229,18 @@ public class Turn {
         this.inizioMattinaM = inizioMattinaM;
     }
 
-    public Integer getFineMattinaH() {
-        return fineMattinaH;
-    }
-
     public void setFineMattinaH(Integer fineMattinaH) {
         this.fineMattinaH = fineMattinaH;
-    }
-
-    public Integer getFineMattinaM() {
-        return fineMattinaM;
     }
 
     public void setFineMattinaM(Integer fineMattinaM) {
         this.fineMattinaM = fineMattinaM;
     }
 
-    public Integer getFinePomeriggioH() {
-        return finePomeriggioH;
-    }
+
 
     public void setFinePomeriggioH(Integer finePomeriggioH) {
         this.finePomeriggioH = finePomeriggioH;
-    }
-
-    public Integer getFinePomeriggioM() {
-        return finePomeriggioM;
     }
 
     public void setFinePomeriggioM(Integer finePomeriggioM) {
@@ -293,15 +297,6 @@ public class Turn {
 
     public void setIsImportante(int isImportante) {
         this.isImportante = 0 != isImportante;
-    }
-
-    // getter personalizzati
-    public String getMattina() {
-        return "" + inizioMattinaH + ":" + inizioMattinaM + "-" + fineMattinaH + ":" + fineMattinaM;
-    }
-
-    public String getPomeriggio() {
-        return "" + inizioPomeriggioH + ":" + inizioPomeriggioM + "-" + finePomeriggioH + ":" + finePomeriggioM;
     }
 
     // setter personalizzati
@@ -383,17 +378,6 @@ public class Turn {
             setFinePomeriggioH(Integer.parseInt(singleTime[0]));
             setFinePomeriggioM(Integer.parseInt(singleTime[1]));
         }
-    }
-
-    public void reset() {
-        this.datariferimento = null;
-        this.inizioMattinaH = null;
-        this.inizioMattinaM = null;
-        this.inizioPomeriggioH = null;
-        this.inizioPomeriggioM = null;
-        this.fineMattinaH = null;
-        this.finePomeriggioM = null;
-        this.isImportante = false;
     }
 
     private double convertMinute(int minute) {
