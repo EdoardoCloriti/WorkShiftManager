@@ -27,6 +27,11 @@ import com.cloriti.workshiftmanager.util.tutorial.WorkshiftManagerTutorial;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+/**
+ * Activity per la creazione e inserimento dei turni data una data specifica
+ *
+ * @Author edoardo.cloriti@studio.unibo.it
+ */
 public class CreateWorkShift extends AppCompatActivity {
 
     private final static String PATTERN = "dd/MM/yyyy";
@@ -38,10 +43,12 @@ public class CreateWorkShift extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_work_shift);
+        //gestione della toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
         toolbar.setTitle(R.string.title_app_upper);
         setSupportActionBar(toolbar);
+        //gestione del NavigarionIcon
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_48dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +76,8 @@ public class CreateWorkShift extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final Intent selectTurnCalendar = new Intent(getApplicationContext(), SelectHours.class);
+                //partrizzazione dell'invacazione dell'activity 'SelectHours' con "am" per fargli capire quale sia
+                //la parte di giornata da valorizzare
                 selectTurnCalendar.putExtra(IDs.PART_OF_DAY, "am");
                 startActivityForResult(selectTurnCalendar, IDs.SelectTurn);
             }
@@ -80,18 +89,27 @@ public class CreateWorkShift extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent selectTurnCalendar = new Intent(getApplicationContext(), SelectHours.class);
+                //partrizzazione dell'invacazione dell'activity 'SelectHours' con "pm" per fargli capire quale sia
+                //la parte di giornata da valorizzare
                 selectTurnCalendar.putExtra(IDs.PART_OF_DAY, "pm");
                 startActivityForResult(selectTurnCalendar, 2);
             }
         });
     }
 
+    /**
+     * metodo per la gestione della chiusura dell'activity
+     */
     private void close() {
         turn = null;
         finish();
     }
 
+    /**
+     * Metodo per sottoscrivere il turno inserito, controllo del CheckBox relativo alla priorità
+     */
     private void submit() {
+        //controllo del CheckBox priorità
         CheckBox priority = (CheckBox) findViewById(R.id.priority);
         turn.setIsImportante(priority.isChecked());
         turn.setHour();
@@ -109,23 +127,23 @@ public class CreateWorkShift extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent out = new Intent();
-        out.putExtra("back", 1);
-        setResult(1, out);
         finish();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //gestione del risultato dell'activity 'SelectHours'
         if (resultCode == 2) {
             Bundle result = data.getExtras();
+            //se il risultaato contiene "back" vuol  dire che è stato premuto il tasto "back" quindi non c'è valore di ritorno
             if (!result.containsKey("back")) {
+                //salvataggio dell'orario mattutino
                 if (result.getString(IDs.ORARIO_MATTINA) != null) {
                     String[] orarioMattina = result.getString(IDs.ORARIO_MATTINA).split("-");
                     turn.setIniziotMattina(orarioMattina[0]);
                     turn.setFineMattina(orarioMattina[1]);
                 }
-
+                //salvataggio dell'orario pomeridiano
                 if (result.getString(IDs.ORARIO_POMERIGGIO) != null) {
                     String[] orarioPomeriggio = result.getString(IDs.ORARIO_POMERIGGIO).split("-");
                     turn.setIniziotPomeriggio(orarioPomeriggio[0]);
@@ -135,29 +153,37 @@ public class CreateWorkShift extends AppCompatActivity {
         }
     }
 
+    /**
+     * metodo per la generazione della notifica n minuti prima dell'inizio del turno
+     * n= minuti settati in fase di configuraione, se non settato viene inserito di default
+     *
+     * @param ore
+     * @param minuti
+     * @param data
+     */
     public void generateRememberNotify(Integer ore, Integer minuti, String data) {
         //Gestione delle notifiche giornaliere
         alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(getApplicationContext(), WorkShiftManagerReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
 
-        // Set the alarm to start at some time.
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        // Checking whether current hour is over 15
         SimpleDateFormat sdf = new SimpleDateFormat(PATTERN);
         try {
             calendar.setTime(sdf.parse(data));
         } catch (Exception e) {
+            //nel caso non sia una data valida viene gestito semplicemente treamite un Toast, tende all'impossibile
             Toast.makeText(getApplicationContext(), "Impossibile creare la notifica", Toast.LENGTH_SHORT);
             return;
         }
 
+        //setting dell'orario a cui effettuare la notifica
         calendar.set(Calendar.HOUR_OF_DAY, ore);
         calendar.set(Calendar.MINUTE, minuti);
         calendar.add(Calendar.MINUTE, -30);
 
-        // every day
+        //setting dell'allarm manager
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
@@ -192,6 +218,12 @@ public class CreateWorkShift extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * metdo per la verifica che un orario non sia null (null:null)
+     *
+     * @param orario
+     * @return
+     */
     private boolean isNull(String orario) {
         return "null:null".equals(orario) ? true : false;
     }

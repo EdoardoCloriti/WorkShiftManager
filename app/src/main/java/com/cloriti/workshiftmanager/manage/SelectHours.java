@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.cloriti.workshiftmanager.R;
 import com.cloriti.workshiftmanager.WorkShiftManagerSetting;
@@ -20,6 +19,12 @@ import com.cloriti.workshiftmanager.util.tutorial.WorkshiftManagerTutorial;
 
 import java.util.Calendar;
 
+/**
+ * Activity per la selezione dell'orario del turno sia per mattina che per pomeriggio
+ * essa è parametrizzata con "am" o "pm" in riferimento alla parte della giornata a cui si riferisce
+ *
+ * @Author edoardo.cloriti@studio.unibo.it
+ */
 public class SelectHours extends AppCompatActivity {
 
     private Intent outputIntent = null;
@@ -29,11 +34,13 @@ public class SelectHours extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Gestione della toolbar
         setContentView(R.layout.activity_select_hours);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
         toolbar.setTitle(R.string.title_app_upper);
         setSupportActionBar(toolbar);
+        //gestione delNavigation icon back
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_48dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,14 +49,16 @@ public class SelectHours extends AppCompatActivity {
             }
         });
 
+        //estrazione dell'imput relativo alla parte di giornata di riferimento
         Bundle bundle = this.getIntent().getExtras();
         outputIntent = new Intent(getApplicationContext(), CreateWorkShift.class);
         h = bundle.getString("part-of-day");
+
         final TextView titleOriario = (TextView) findViewById(R.id.title_orario);
         final TimePicker orarioInizio = (TimePicker) findViewById(R.id.inizio);
         final TimePicker orarioFine = (TimePicker) findViewById(R.id.fine);
-        //CheckBox importante = (CheckBox) findViewById(R.id.riunione);
-        outputIntent.putExtra("priority", false);
+
+        //setting dell'orario di inzio metodi deprecati in Android L ma ancora funzionanti
         orarioInizio.setIs24HourView(false);
         if ("am".equalsIgnoreCase(h)) {
             titleOriario.setText(R.string.matt);
@@ -70,31 +79,52 @@ public class SelectHours extends AppCompatActivity {
         }
     }
 
+    /**
+     * Metodo per il salvataggio e la sottomissione dei dati
+     */
     private void submit() {
         TimePicker orarioInizio = (TimePicker) findViewById(R.id.inizio);
         TimePicker orarioFine = (TimePicker) findViewById(R.id.fine);
+
+        //salvataggio degli orari h e m immessi
         Integer hourStart = orarioInizio.getHour();
         Integer minuteStart = orarioInizio.getMinute();
         Integer hourFinish = orarioFine.getHour();
         Integer minuteFinish = orarioFine.getMinute();
+        //inserimento della parte di giornata nel risultato
         outputIntent.putExtra(IDs.PART_OF_DAY, h);
+
+        //validazione dell'orario della mattina
         String am = manageAM(hourStart, minuteStart, hourFinish, minuteFinish);
+        //validazione dell'orario pomeridiano
         String pm = managePM(hourStart, minuteStart, hourFinish, minuteFinish);
+        //controllo delle validazione
         if ("am".equalsIgnoreCase(h) && am != null) {
+            //se l'orario immesso è relativo alla mattina e la validazione è stata effettuata con successo
+            //si inseerisce il turno nel risultato e si restituisce il controllo al chiamante
             outputIntent.putExtra(IDs.ORARIO_MATTINA, am);
             setResult(2, outputIntent);
             finish();
         } else if ("pm".equalsIgnoreCase(h) && pm != null) {
+            //se l'orario immesso è relativo del pomeriggio e la validazione è stata effettuata con successo
+            //si inseerisce il turno nel risultato e si restituisce il controllo al chiamante
             outputIntent.putExtra(IDs.ORARIO_POMERIGGIO, pm);
             setResult(2, outputIntent);
             finish();
         } else
+            //si gestisce l'errore con un alert
             alert();
     }
 
-    /*
-      * Metodo per la gestione dell'orario del turno caso 'AM'
-      */
+    /**
+     * Metodo per la gestione dell'orario del turno caso 'AM'
+     *
+     * @param hourStart
+     * @param minuteStart
+     * @param hourFinish
+     * @param minuteFinish
+     * @return
+     */
     private String manageAM(Integer hourStart, Integer minuteStart, Integer hourFinish, Integer minuteFinish) {
         if (!validatTimetable(hourStart, minuteStart, hourFinish, minuteFinish))
             return null;
@@ -104,8 +134,15 @@ public class SelectHours extends AppCompatActivity {
             return (hourStart + ":" + minuteStart) + "-" + (hourFinish + ":" + minuteFinish);
     }
 
-    /*
+
+    /**
      * Metodo per la gestione dell'orario del turno caso 'PM'
+     *
+     * @param hourStart
+     * @param minuteStart
+     * @param hourFinish
+     * @param minuteFinish
+     * @return
      */
     private String managePM(Integer hourStart, Integer minuteStart, Integer hourFinish, Integer minuteFinish) {
         if (!validatTimetable(hourStart, minuteStart, hourFinish, minuteFinish))
@@ -116,10 +153,9 @@ public class SelectHours extends AppCompatActivity {
             return (hourStart + ":" + minuteStart) + "-" + (hourFinish + ":" + minuteFinish);
     }
 
-    private void alertTost() {
-        Toast.makeText(this, "Orario inserito non valido si prega di ricompilare", Toast.LENGTH_LONG).show();
-    }
-
+    /**
+     * metodo per la creazione dell'alert nel caso in cui l'orario immesso non è corretto
+     */
     private void alert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(SelectHours.this);
         builder.setTitle(this.getString(R.string.title_activity_select_hours));
@@ -135,6 +171,16 @@ public class SelectHours extends AppCompatActivity {
         d.show();
     }
 
+    /**
+     * metodo per la validazione dell'orario di inzio e di fine turno
+     * controlla che l'orario di inizio non sia dopo o sia uguale a quello di fine
+     *
+     * @param oraI
+     * @param minI
+     * @param oraf
+     * @param minF
+     * @return
+     */
     private boolean validatTimetable(int oraI, int minI, int oraf, int minF) {
         Calendar init = Calendar.getInstance();
         init.set(Calendar.HOUR, oraI);
@@ -149,6 +195,14 @@ public class SelectHours extends AppCompatActivity {
             return true;
     }
 
+    /**
+     * validazione dell'orario di inizio
+     * controlla che esso si coerente con la parte del giorno gestita
+     *
+     * @param orario
+     * @param hour
+     * @return
+     */
     private boolean validateStartHour(String orario, int hour) {
         if ("am".equalsIgnoreCase(orario)) {
             return hour <= 11;

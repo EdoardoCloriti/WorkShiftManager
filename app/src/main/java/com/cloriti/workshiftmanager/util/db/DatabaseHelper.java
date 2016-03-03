@@ -4,6 +4,11 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/**
+ * Classe per la gestione del DB
+ *
+ * @Author edoardo.cloriti@studio.unibo.it
+ */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     public final static String DATABASE_NAME = "workshiftmanager.db";

@@ -183,14 +183,6 @@ public class DbAdapter {
             return null;
     }
 
-    public Cursor fetchSetting() {
-        Cursor cursor = database.query(SETTING_DATABASE_TABLE, new String[]{ID, PROPERTY, VALUE}, null, null, null, null, null);
-        if (cursor != null && cursor.getCount() > 0)
-            return cursor;
-        else
-            return null;
-    }
-
     public boolean updateProperty(String property, String value) {
         ContentValues values = fillProperty(property, value);
         return database.update(SETTING_DATABASE_TABLE, values, PROPERTY + "=?", new String[]{property}) > 0;

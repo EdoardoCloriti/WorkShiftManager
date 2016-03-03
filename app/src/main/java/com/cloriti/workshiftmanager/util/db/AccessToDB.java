@@ -10,33 +10,55 @@ import com.cloriti.workshiftmanager.util.Turn;
 import com.cloriti.workshiftmanager.util.Week;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created by Edoardo on 29/02/2016.
+ * Classe utility per l'accesso semplificato al database
+ *
+ * @Author: edoardo.cloriti@studio.unibo.it
  */
 public class AccessToDB {
 
     private DbAdapter dbAdapter = null;
 
+    /**
+     * metodo che effettua <code>insert</code>/<code>update</code> del <code>Turn</code> e del <code>Week</code>
+     *
+     * @param turn
+     * @param context
+     * @throws ParseException
+     */
     public void insertTurn(Turn turn, Context context) throws ParseException {
         try {
             int id = 0;
             Week week = null;
+            /**
+             * Gestione del Turn
+             */
+
+            //controllo dell'esistenza del turno du db
             if ((id = existTurn(turn.getDataRierimentoDateStr(), context)) != 0) {
+                //se esiste effettua l'update
                 dbAdapter = new DbAdapter(context);
                 dbAdapter.open();
                 dbAdapter.updateTurn(id, turn.getWeekId(), turn.getYear(), turn.getDataRierimentoDateStr(), turn.getInizioMattina(), turn.getFineMattina(), turn.getInizioPomeriggio(), turn.getFinePomeriggio(), turn.getOvertime(), turn.getHour(), new Long(turn.getIsImportante() ? 1 : 0));
                 dbAdapter.close();
             } else {
+                //se non esiste effettu la insert
                 dbAdapter = new DbAdapter(context);
                 dbAdapter.open();
                 dbAdapter.createTurn(turn.getDataRierimentoDateStr(), turn.getWeekId(), turn.getYear(), turn.getInizioMattina(), turn.getFineMattina(), turn.getInizioPomeriggio(), turn.getFinePomeriggio(), turn.getOvertime(), turn.getHour(), new Long(turn.getIsImportante() ? 1 : 0));
                 dbAdapter.close();
             }
             dbAdapter.close();
+
+            /**
+             * Gestione del Week
+             */
+
+            //controllo dell'esistenza del week
             if ((week = getWeeekByCorrelationId(turn.getYear(), turn.getWeekId(), context)) == null) {
+                //se non esiste lo crea e effettua la insert
                 week = new Week(context);
                 week.setWeekId(turn.getWeekId());
                 week.setYear(turn.getYear());
@@ -45,6 +67,7 @@ public class AccessToDB {
                 week.setExtraHour(turn.getOvertime());
                 insertWeek(week, context);
             } else {
+                //se esiste lo aggiorna e effettua l'update
                 week.addHour(turn.getHour());
                 week.setExtraHour(turn.getOvertime());
                 updateWeek(week, context);
@@ -55,11 +78,20 @@ public class AccessToDB {
         }
     }
 
+    /**
+     * metodo per l'eliminazione del turno e aggiornamento della settimana di riferimento
+     *
+     * @param turn
+     * @param context
+     * @return
+     */
     public boolean deleteTurnAndUpdateWeek(Turn turn, Context context) {
         dbAdapter = new DbAdapter(context);
         try {
             dbAdapter.open();
+            //se il turno esiste e l'eliminazione avviene con successo
             if (turn.getId() != 0 && dbAdapter.deleteTurn(turn.getId())) {
+                //effettua l'aggiornamento della settimana
                 Week week = getWeeekByCorrelationId(turn.getYear(), turn.getWeekId(), context);
                 if (week != null) {
                     double hour = week.getHour() - turn.getHour();
@@ -76,6 +108,13 @@ public class AccessToDB {
         }
     }
 
+    /**
+     * metodo per l'eliminazione del turno
+     *
+     * @param turn
+     * @param context
+     * @return
+     */
     public boolean deleteTurn(Turn turn, Context context) {
         dbAdapter = new DbAdapter(context);
         try {
@@ -86,20 +125,34 @@ public class AccessToDB {
         }
     }
 
+    /**
+     * eliminazione di una lista di turni
+     *
+     * @param turns
+     * @param context
+     */
     public void deleteTurns(List<Turn> turns, Context context) {
         for (Turn turn : turns) {
             deleteTurn(turn, context);
         }
     }
 
+    /**
+     * pulizia dei turni in base all'anno passato come parametro
+     *
+     * @param year
+     * @param context
+     */
     public void clearTurnByYear(int year, Context context) {
         List<Turn> turns = new ArrayList<Turn>();
         dbAdapter = new DbAdapter(context);
         try {
             dbAdapter.open();
+            //estrazione dei turni dell'anno
             Cursor cursor = dbAdapter.fetchTurnByYear(year);
             if (cursor != null && cursor.moveToFirst()) {
                 do {
+                    //preparazione del turno all'eliminazione
                     Turn turn = new Turn();
                     turn.setId(cursor.getString(cursor.getColumnIndex(DbAdapter.ID)));
                     turn.setDatariferimento(cursor.getString(cursor.getColumnIndex(DbAdapter.REFERENCE_DATE)));
@@ -119,6 +172,7 @@ public class AccessToDB {
                 } while (cursor.moveToNext());
                 cursor.close();
             }
+            //eliminazione dei turni estratti
             deleteTurns(turns, context);
         } finally {
             if (dbAdapter != null)
@@ -127,6 +181,12 @@ public class AccessToDB {
 
     }
 
+    /**
+     * metodo per l'eliminazione di una settimana
+     *
+     * @param week
+     * @param context
+     */
     public void deleteWeek(Week week, Context context) {
         dbAdapter = new DbAdapter(context);
         try {
@@ -137,12 +197,26 @@ public class AccessToDB {
         }
     }
 
+    /**
+     * metodo per l'eliminazione di una lista di settimane
+     *
+     * @param weeks
+     * @param context
+     */
     public void deleteWeeks(List<Week> weeks, Context context) {
         for (Week week : weeks) {
             deleteWeek(week, context);
         }
     }
 
+
+    /**
+     * metodo per la pulizia delle sttimane da anno x a anno y passati come parametro
+     *
+     * @param yearFrom
+     * @param yearTo
+     * @param context
+     */
     public void cleanWeekByYearToYear(int yearFrom, int yearTo, Context context) {
         List<Week> weeks = new ArrayList<Week>();
         try {
@@ -171,48 +245,13 @@ public class AccessToDB {
 
     }
 
-    public int insertTurns(List<Turn> turns, Context context) throws ParseException {
-        int n = 0;
-        for (Turn turn : turns) {
-            insertTurn(turn, context);
-            n = n++;
-        }
-        return n;
-    }
-
-    public int updateTurn(List<Turn> turns, Context context) {
-        try {
-            Iterator<Turn> i = turns.iterator();
-            int n = 0;
-            while (i.hasNext()) {
-                Turn turn = i.next();
-                Week week = null;
-                dbAdapter = new DbAdapter(context);
-                dbAdapter.open();
-                dbAdapter.updateTurn(turn.getId(), turn.getWeekId(), turn.getYear(), turn.getDataRierimentoDateStr(), turn.getInizioMattina(), turn.getFineMattina(), turn.getInizioPomeriggio(), turn.getFinePomeriggio(), turn.getOvertime(), turn.getHour(), new Long(turn.getIsImportante() ? 1 : 0));
-                dbAdapter.close();
-                if ((week = getWeekbySelectedDay(turn, context)) == null) {
-                    week = new Week(context);
-                    week.setWeekId(turn.getWeekId());
-                    week.setYear(turn.getYear());
-                    week.setMounth(turn.getMounth());
-                    week.addHour(turn.getHour());
-                    week.setExtraHour(turn.getOvertime());
-                    insertWeek(week, context);
-                } else {
-                    week.addHour(turn.getHour());
-                    week.setExtraHour(turn.getOvertime());
-                    updateWeek(week, context);
-                }
-                n = n++;
-            }
-            return n;
-        } finally {
-            if (dbAdapter != null)
-                dbAdapter.close();
-        }
-    }
-
+    /**
+     * metodo per l'estrazione di un turno in base alla data passata come parametro
+     *
+     * @param day
+     * @param context
+     * @return
+     */
     public Turn getTurnBySelectedDay(String day, Context context) {
         Cursor cursor = null;
         try {
@@ -253,6 +292,13 @@ public class AccessToDB {
         }
     }
 
+    /**
+     * metodo per l'inserimento della settimana
+     *
+     * @param week
+     * @param context
+     * @return
+     */
     public long insertWeek(Week week, Context context) {
         try {
             dbAdapter = new DbAdapter(context);
@@ -266,6 +312,13 @@ public class AccessToDB {
         }
     }
 
+    /**
+     * metodo per l'aggiornamento della settimana passat come parametro
+     *
+     * @param week
+     * @param context
+     * @return
+     */
     public boolean updateWeek(Week week, Context context) {
         try {
             dbAdapter = new DbAdapter(context);
@@ -279,6 +332,14 @@ public class AccessToDB {
         }
     }
 
+    /**
+     * metodo per estrare una settimana tramite anno e id della settimana (correlation id)
+     *
+     * @param year
+     * @param weekid
+     * @param context
+     * @return
+     */
     public Week getWeeekByCorrelationId(int year, int weekid, Context context) {
         Cursor cursor = null;
         try {
@@ -308,36 +369,14 @@ public class AccessToDB {
         }
     }
 
-    @SuppressWarnings("static-access")
-    public Week getWeekbySelectedDay(Turn day, Context context) {
-        Cursor cursor = null;
-        try {
-            dbAdapter = new DbAdapter(context);
-
-            Week week = new Week(context);
-            dbAdapter.open();
-            cursor = dbAdapter.fetchWeekByCorrelationID(day.getYear(), day.getWeekId());
-            if (cursor != null && cursor.moveToFirst()) {
-                week.setId(cursor.getInt(cursor.getColumnIndex(dbAdapter.ID)));
-                week.setWeekId(cursor.getInt(cursor.getColumnIndex(dbAdapter.WEEK_ID)));
-                week.setYear(cursor.getInt(cursor.getColumnIndex(dbAdapter.YEAR)));
-                week.setMounth(cursor.getInt(cursor.getColumnIndex(dbAdapter.MOUNTH)));
-                week.addHour(cursor.getDouble(cursor.getColumnIndex(dbAdapter.HOUR)));
-                week.setExtraHour(cursor.getDouble(cursor.getColumnIndex(dbAdapter.OVERTIME)));
-                dbAdapter.close();
-                return week;
-            } else {
-                dbAdapter.close();
-                return null;
-            }
-        } finally {
-            if (cursor != null)
-                cursor.close();
-            if (dbAdapter != null)
-                dbAdapter.close();
-        }
-    }
-
+    /**
+     * metodo che dato un mese e un anno restitusce la lista di settimane che compongono il mese
+     *
+     * @param mounth
+     * @param year
+     * @param context
+     * @return
+     */
     @SuppressWarnings("static-access")
     public List<Week> getMounth(int mounth, int year, Context context) {
         Cursor cursor = null;
@@ -408,10 +447,26 @@ public class AccessToDB {
     }
 
 
+    /**
+     * metodo per verificare se un orario è null (null:null)
+     *
+     * @param cursor
+     * @param field
+     * @return
+     */
     private boolean isNull(Cursor cursor, String field) {
         return "null:null".equalsIgnoreCase(cursor.getString(cursor.getColumnIndex(field)));
     }
 
+    /**
+     * metodo per contollare se esiste un turno
+     * restitusce l'id se esiste 0 altrimenti
+     *
+     * @param referenceDate
+     * @param context
+     * @return
+     * @throws ParseException
+     */
     public int existTurn(String referenceDate, Context context) throws ParseException {
         Cursor cursor = null;
         try {
@@ -434,6 +489,12 @@ public class AccessToDB {
         }
     }
 
+    /**
+     * metodo per inserire un Property (Setting)
+     *
+     * @param property
+     * @param context
+     */
     public void insertProperty(Property property, Context context) {
         try {
 
@@ -453,38 +514,13 @@ public class AccessToDB {
         }
     }
 
-    public void insertProperties(List<Property> properties, Context context) {
-        for (Property property : properties) {
-            insertProperty(property, context);
-        }
-    }
-
-    public List<Property> getProperies(Context context) {
-        Cursor cursor = null;
-        try {
-            List<Property> properties = new ArrayList<Property>();
-            dbAdapter = new DbAdapter(context);
-            dbAdapter.open();
-            cursor = dbAdapter.fetchSetting();
-            if (cursor != null && cursor.getCount() > 0) {
-                for (int i = 0; i < cursor.getCount(); i++) {
-                    Property property = new Property();
-                    cursor.moveToNext();
-                    property.setProperty(cursor.getString(cursor.getColumnIndex(DbAdapter.PROPERTY)));
-                    property.setValue(cursor.getString(cursor.getColumnIndex(DbAdapter.VALUE)));
-                    properties.add(property);
-                }
-                return properties;
-            } else
-                return properties;
-        } finally {
-            if (cursor != null)
-                cursor.close();
-            if (dbAdapter != null)
-                dbAdapter.close();
-        }
-    }
-
+    /**
+     * metodo che dato il nome di una property restituisce la property salvata su DB se esiste null altrimenti
+     *
+     * @param reqProperty
+     * @param context
+     * @return
+     */
     public Property getProperty(String reqProperty, Context context) {
         Cursor cursor = null;
         try {
@@ -507,6 +543,13 @@ public class AccessToDB {
         }
     }
 
+    /**
+     * metodo che controlla l'esistenza di una propertyt su DB tramite un istanza di essa
+     *
+     * @param property
+     * @param context
+     * @return
+     */
     public int existPropery(Property property, Context context) {
         Cursor cursor = null;
         try {
@@ -526,6 +569,13 @@ public class AccessToDB {
         }
     }
 
+    /**
+     * metodo per controllare l'esistenza di una property su DB tramite il nome
+     *
+     * @param property
+     * @param context
+     * @return
+     */
     public int existPropery(String property, Context context) {
         Cursor cursor = null;
         try {

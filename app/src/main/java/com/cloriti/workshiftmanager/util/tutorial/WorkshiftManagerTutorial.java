@@ -8,10 +8,15 @@ import com.cloriti.workshiftmanager.R;
 
 
 /**
- * Created by Edoardo on 27/01/2016.
+ * classe per la gestione degli hel delle applicazione
+ *
+ * @Auuthor edoardo.cloriti@studio.unibo.it
  */
 public class WorkshiftManagerTutorial {
 
+    /**
+     * nomi dei tutorial
+     */
     public static final String WORK_SHIFT_MANAGER = "WorkShiftManager";
     public static final String WORK_SHFIT_MANAGER_SETTING = "WorkShiftManagerSetting";
     public static final String DISPLAY = "DisplayTurn";
@@ -23,6 +28,12 @@ public class WorkshiftManagerTutorial {
     public static final String DISPLAY_YEAR = "DisplayYear";
     public static final String DISPLAY_WEEK = "DisplayHourWeek";
 
+    /**
+     * crea l'alert con il tutorial specificato per name
+     *
+     * @param context
+     * @param tutorialName
+     */
     public static void showWorkShiftManagerTurorial(Context context, String tutorialName) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -40,6 +51,13 @@ public class WorkshiftManagerTutorial {
 
     }
 
+    /**
+     * dato un name restituisce l'id del messaggio da visualizzare
+     *
+     * @param context
+     * @param tutorialName
+     * @return
+     */
     private static int getMessageId(Context context, String tutorialName) {
 
         if (WORK_SHIFT_MANAGER.equals(tutorialName))
