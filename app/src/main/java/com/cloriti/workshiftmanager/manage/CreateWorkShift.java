@@ -39,9 +39,9 @@ public class CreateWorkShift extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_work_shift);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         toolbar.setLogo(R.mipmap.ic_launcher);
         toolbar.setTitle(R.string.title_app_upper);
+        setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_48dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
