@@ -10,7 +10,7 @@ import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 
 /**
- * Classe per Ricevere le Notifiche dell'applicazione
+ * Classe per Ricevere le Notifiche ordinarie dell'applicazione
  *
  * @Author edoardo.cloriti@studio.unibo.it
  */
@@ -28,8 +28,8 @@ public class WorkShiftManagerReceiver extends BroadcastReceiver {
         //Show the notification
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle("Il Tuo turno sta per cominciare")
+                        .setSmallIcon(R.mipmap.ic_event_note_black_48dp)
+                        .setContentTitle("Workshift Manager")
                         .setContentText("Controlla i tuoi turni, il tuo turno sta per cominciare!")
                         .setAutoCancel(true)
                         .setDefaults(-1);

@@ -60,12 +60,13 @@
             android:label="@string/title_activity_display_mounth"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <receiver android:name=".WorkShiftManagerReceiver" />
-
         <activity
             android:name=".selection.ManageCalendar"
             android:label="@string/title_activity_manage_calendar"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <receiver android:name=".WorkShiftManagerReceiver" />
+        <receiver android:name=".WorkshiftManagerNotifyReciver" />
     </application>
 
 </manifest>
