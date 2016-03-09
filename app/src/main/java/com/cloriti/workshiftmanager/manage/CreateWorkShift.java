@@ -16,8 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cloriti.workshiftmanager.R;
-import com.cloriti.workshiftmanager.WorkShiftManagerReceiver;
 import com.cloriti.workshiftmanager.WorkShiftManagerSetting;
+import com.cloriti.workshiftmanager.WorkshiftManagerNotifyReciver;
 import com.cloriti.workshiftmanager.util.IDs;
 import com.cloriti.workshiftmanager.util.Property;
 import com.cloriti.workshiftmanager.util.Turn;
@@ -164,7 +164,7 @@ public class CreateWorkShift extends AppCompatActivity {
     public void generateRememberNotify(Integer ore, Integer minuti, String data) {
         //Gestione delle notifiche giornaliere
         alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(getApplicationContext(), WorkShiftManagerReceiver.class);
+        Intent intent = new Intent(getApplicationContext(), WorkshiftManagerNotifyReciver.class);
         pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
 
         Calendar calendar = Calendar.getInstance();
@@ -184,7 +184,7 @@ public class CreateWorkShift extends AppCompatActivity {
         calendar.add(Calendar.MINUTE, -30);
 
         //setting dell'allarm manager
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.RTC, pendingIntent);
     }
 
     @Override
