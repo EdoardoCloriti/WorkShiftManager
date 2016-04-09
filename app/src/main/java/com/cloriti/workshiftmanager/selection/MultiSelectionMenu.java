@@ -29,7 +29,7 @@ public class MultiSelectionMenu extends AppCompatActivity {
         setContentView(R.layout.activity_multi_selection_menu);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.title_app_upper);
-        toolbar.setLogo(R.mipmap.ic_launcher);
+        toolbar.setLogo(R.mipmap.ic_insert_invitation_black_48dp);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_48dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

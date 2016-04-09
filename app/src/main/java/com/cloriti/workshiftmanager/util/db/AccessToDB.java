@@ -78,6 +78,13 @@ public class AccessToDB {
         }
     }
 
+    public void insertGoogleCalendarId(Turn turn, Context context) {
+        dbAdapter = new DbAdapter(context);
+        dbAdapter.open();
+        dbAdapter.updateTurnWithGoogleCalendarId(turn.getId(), turn.getWeekId(), turn.getYear(), turn.getDataRierimentoDateStr(), turn.getInizioMattina(), turn.getFineMattina(), turn.getInizioPomeriggio(), turn.getFinePomeriggio(), turn.getOvertime(), turn.getHour(), new Long(turn.getIsImportante() ? 1 : 0), turn.getGoogleCalendarIDMattina(), turn.getGoogleCalendarIDPomeriggio());
+        dbAdapter.close();
+    }
+
     /**
      * metodo per l'eliminazione del turno e aggiornamento della settimana di riferimento
      *
@@ -279,11 +286,17 @@ public class AccessToDB {
                 if (!isNull(cursor, DbAdapter.HOUR))
                     turn.setHour(cursor.getString(cursor.getColumnIndex(DbAdapter.HOUR)));
                 turn.setIsImportante(cursor.getString(cursor.getColumnIndex(DbAdapter.PRIORITY)));
+                if (cursor.getString(cursor.getColumnIndex(DbAdapter.GOOGLE_ID_MATTINA)) != null)
+                    turn.setGoogleCalendarIDMattina(cursor.getString(cursor.getColumnIndex(DbAdapter.GOOGLE_ID_MATTINA)));
+                if (cursor.getString(cursor.getColumnIndex(DbAdapter.GOOGLE_ID_POMERIGGIO)) != null)
+                    turn.setGoogleCalendarIDPomeriggio(cursor.getString(cursor.getColumnIndex(DbAdapter.GOOGLE_ID_POMERIGGIO)));
                 cursor.close();
             } else
                 turn = NullObjectStrategy.nullTurn();
             dbAdapter.close();
             return turn;
+        } catch (Throwable t) {
+            return null;
         } finally {
             if (cursor != null)
                 cursor.close();

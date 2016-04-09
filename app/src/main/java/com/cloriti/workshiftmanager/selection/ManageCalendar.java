@@ -1,10 +1,14 @@
 package com.cloriti.workshiftmanager.selection;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -17,11 +21,14 @@ import android.widget.Toast;
 
 import com.cloriti.workshiftmanager.R;
 import com.cloriti.workshiftmanager.WorkShiftManagerSetting;
+import com.cloriti.workshiftmanager.WorkshiftManagerNotifyReciver;
 import com.cloriti.workshiftmanager.display.DisplayHourWeek;
 import com.cloriti.workshiftmanager.display.DisplayTurn;
 import com.cloriti.workshiftmanager.manage.CreateWorkShift;
 import com.cloriti.workshiftmanager.util.IDs;
+import com.cloriti.workshiftmanager.util.Property;
 import com.cloriti.workshiftmanager.util.Turn;
+import com.cloriti.workshiftmanager.util.calendar.GoogleCalendarManager;
 import com.cloriti.workshiftmanager.util.db.AccessToDB;
 import com.cloriti.workshiftmanager.util.tutorial.WorkshiftManagerTutorial;
 
@@ -45,6 +52,13 @@ public class ManageCalendar extends AppCompatActivity {
     private static final String STARLING = "StarlingHours";
     private static final String DISPLAY_WEEK = "DisplaySettimana";
     private static final int MONDAY = 1;
+
+    private final static String PATTERN = "dd/MM/yyyy";
+    private PendingIntent pendingIntent;
+    private AlarmManager alarmManager;
+    private GoogleCalendarManager calendarManager;
+
+
     /**
      * Use-case passato come parametro dal chiamante
      */
@@ -58,7 +72,7 @@ public class ManageCalendar extends AppCompatActivity {
         setContentView(R.layout.activity_manage_calendar);
         //Gestione della toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setLogo(R.mipmap.ic_launcher);
+        toolbar.setLogo(R.mipmap.ic_insert_invitation_black_48dp);
         toolbar.setTitle(R.string.title_app_upper);
         //Gestione della NavigationIcon back
         setSupportActionBar(toolbar);
@@ -109,7 +123,7 @@ public class ManageCalendar extends AppCompatActivity {
                         add.putExtra(IDs.WEEK_ID, selected.get(Calendar.WEEK_OF_YEAR));
                         add.putExtra(IDs.YEAR, year);
                         add.putExtra(IDs.MONTH, month + 1);
-                        startActivity(add);
+                        startActivityForResult(add, 6);
                     } else {
                         //gestione del giorno non selezionabile tramite Toast
                         Toast.makeText(getApplicationContext(), "Giorno selezionato non disponibile", Toast.LENGTH_SHORT).show();
@@ -126,7 +140,7 @@ public class ManageCalendar extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), selectedDay, Toast.LENGTH_SHORT).show();
                     //inserimento della data che si vuole visualizzare
                     i.putExtra("SELECTED_DAY", selectedDay);
-                    startActivity(i);
+                    startActivityForResult(i, 7);
                 }
                 /**
                  * use case overtime - gestione dell'inserimento degli straordinari tramite pop up
@@ -396,6 +410,125 @@ public class ManageCalendar extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 6) {
+            Bundle result = data.getExtras();
+            turn = Turn.turnByBundle(result);
+
+            AccessToDB db = new AccessToDB();
+            if (db.existTurn(turn.getDataRierimentoDateStr(), getApplicationContext()) != 0) {
+                Turn oldTurn = db.getTurnBySelectedDay(turn.getDataRierimentoDateStr(), getApplicationContext());
+                if (oldTurn.getGoogleCalendarIDMattina() != null)
+                    turn.setGoogleCalendarIDMattina2Rem(oldTurn.getGoogleCalendarIDMattina());
+
+                if (oldTurn.getGoogleCalendarIDPomeriggio() != null)
+                    turn.setGoogleCalendarIDPomeriggio2Rem(oldTurn.getGoogleCalendarIDPomeriggio());
+            }
+            db.insertTurn(turn, getApplicationContext());
+            if (db.existPropery(Property.NOTIFICA, getApplicationContext()) != 0) {
+                Property notify = db.getProperty(Property.NOTIFICA, getApplicationContext());
+                if ("true".equals(notify.getValue())) {
+                    if (!isNull(turn.getInizioMattina()))
+                        generateRememberNotify(turn.getInizioMattinaH(), turn.getInizioMattinaM(), turn.getDataRierimentoDateStr());
+                    if (!isNull(turn.getInizioPomeriggio()))
+                        generateRememberNotify(turn.getInizioPomeriggioH(), turn.getInizioPomeriggioM(), turn.getDataRierimentoDateStr());
+                }
+            }
+
+            if (isSynchCalendarReq(new AccessToDB())) {
+                try {
+                    calendarManager = new GoogleCalendarManager(getApplicationContext(), ManageCalendar.this);
+                    calendarManager.createGoogleCalendar();
+                    calendarManager.setTurnToAdd(turn);
+                    calendarManager.getResultsFromApi();
+                    calendarManager.getResultsFromApi();
+                } catch (Throwable t) {
+                    calendarManager.getResultsFromApi();
+
+                }
+            }
+        }
+        if (resultCode == 7) {
+            Bundle result = data.getExtras();
+            turn = Turn.turnByBundle(result);
+            if (turn.isOnlyDelete()) {
+                AccessToDB db = new AccessToDB();
+                db.deleteTurnAndUpdateWeek(turn, getApplicationContext());
+                if (isSynchCalendarReq(new AccessToDB())) {
+                    try {
+                        calendarManager = new GoogleCalendarManager(getApplicationContext(), ManageCalendar.this);
+                        calendarManager.createGoogleCalendar();
+                        calendarManager.setTurnToAdd(turn);
+                        calendarManager.getResultsFromApi();
+                        calendarManager.getResultsFromApi();
+                    } catch (Throwable t) {
+                        calendarManager.getResultsFromApi();
+
+                    }
+                }
+
+            }
+        }
+    }
+
+    private boolean isNull(String orario) {
+        return "null:null".equals(orario) ? true : false;
+    }
+
+    private boolean isSynchCalendarReq(AccessToDB db) {
+        if (db.existPropery(Property.CALENDAR, getApplicationContext()) != 0) {
+            Property calendar = db.getProperty(Property.CALENDAR, getApplicationContext());
+            if ("true".equals(calendar.getValue())) {
+                return true;
+            } else
+                return false;
+        } else
+            return false;
+    }
+
+    /**
+     * metodo per la generazione della notifica n minuti prima dell'inizio del turno
+     * n= minuti settati in fase di configuraione, se non settato viene inserito di default
+     *
+     * @param ore
+     * @param minuti
+     * @param data
+     */
+    public void generateRememberNotify(Integer ore, Integer minuti, String data) {
+        //Gestione delle notifiche giornaliere
+        alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getApplicationContext(), WorkshiftManagerNotifyReciver.class);
+        pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        SimpleDateFormat sdf = new SimpleDateFormat(PATTERN);
+        try {
+            calendar.setTime(sdf.parse(data));
+        } catch (Exception e) {
+            //nel caso non sia una data valida viene gestito semplicemente treamite un Toast, tende all'impossibile
+            Toast.makeText(getApplicationContext(), "Impossibile creare la notifica", Toast.LENGTH_SHORT);
+            return;
+        }
+
+        //setting dell'orario a cui effettuare la notifica
+        calendar.set(Calendar.HOUR_OF_DAY, ore);
+        calendar.set(Calendar.MINUTE, minuti);
+        calendar.add(Calendar.MINUTE, -30);
+
+        //setting dell'allarm manager
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.ELAPSED_REALTIME, pendingIntent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        calendarManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
 }

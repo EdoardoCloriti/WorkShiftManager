@@ -33,7 +33,7 @@ public class DisplayTurn extends AppCompatActivity {
         //Gestione della toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.title_app_upper);
-        toolbar.setLogo(R.mipmap.ic_launcher);
+        toolbar.setLogo(R.mipmap.ic_insert_invitation_black_48dp);
         setSupportActionBar(toolbar);
         //Gestione del navigation Button della toolbar
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_48dp);
@@ -63,7 +63,7 @@ public class DisplayTurn extends AppCompatActivity {
         TextView overValue = (TextView) findViewById(R.id.overvalue);
         TextView orevalue = (TextView) findViewById(R.id.orevalue);
 
-        title.setText(turn.getDatariferimento());
+        title.setText(selectedDay);
 
         //Controllo se è settato è presente un turno di mattina altrimenti lo setto "Di Riposo"
         if (turn.getInizioMattina() != null && turn.getFineMattina() != null && !isNull(turn.getInizioMattina(), turn.getFineMattina())) {
@@ -100,11 +100,16 @@ public class DisplayTurn extends AppCompatActivity {
      * in caso affermativo si elimina il turno dal databse aggiornando la settimana
      */
     private void close() {
+        int result = 7;
         CheckBox cancella = (CheckBox) findViewById(R.id.delete);
+        Intent output = new Intent();
         if (cancella.isChecked()) {
-            AccessToDB db = new AccessToDB();
-            db.deleteTurnAndUpdateWeek(turn, getApplicationContext());
+            turn.setIsOnlyDelete(true);
         }
+        if (turn.getDataRierimentoDateStr() == null)
+            result = 0;
+        output = Turn.intentByTurn(output, turn);
+        setResult(result, output);
         finish();
     }
 

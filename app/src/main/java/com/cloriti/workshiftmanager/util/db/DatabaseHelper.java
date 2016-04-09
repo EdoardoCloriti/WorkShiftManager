@@ -14,7 +14,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public final static String DATABASE_NAME = "workshiftmanager.db";
     public final static int DATABASE_VERSION = 1;
 
-    private static final String TURN_DATABASE_CREATE = "create table turn (_id integer primary key autoincrement,week_id number not null,year number not null, reference_date text not null, mattina_inizio text, mattina_fine text,pomeriggio_inizio text,pomeriggio_fine text,overtime number,hour number,priority number);";
+    private static final String TURN_DATABASE_CREATE = "create table turn (_id integer primary key autoincrement,week_id number not null,year number not null, reference_date text not null, mattina_inizio text, mattina_fine text,pomeriggio_inizio text,pomeriggio_fine text,overtime number,hour number,priority number,id_google_calendar_mattina text,id_google_calendar_pomeriggio  text);";
     private static final String HOUR_DATABASE_CREATE = "create table hour (_id integer primary key autoincrement,week_id number not null,year number not null, mounth number ,hour number, overtime number not null);";
     private static final String SETTING_DATABASE_CREATE = "create table setting (_id integer primary key autoincrement, property text not null, value text not null);";
 

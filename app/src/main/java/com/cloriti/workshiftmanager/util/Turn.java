@@ -16,6 +16,7 @@ public class Turn {
     public static final String PATTERN = "dd/MM/yyyy";
 
     private int id = 0;
+
     private int weekId;
     private int year;
     private int mounth;
@@ -36,6 +37,13 @@ public class Turn {
 
     private boolean isImportante = false;
 
+    private String googleCalendarIDMattina = null;
+    private String googleCalendarIDPomeriggio = null;
+
+    private boolean isOnlyDelete = false;
+    private String googleCalendarIDMattina2Rem = null;
+    private String googleCalendarIDPomeriggio2Rem = null;
+
     /**
      * Dato un Bundle contenente i dati per un turno restituisce un oggetto di tipo Turn con i dati settati dal Bundle
      *
@@ -44,6 +52,7 @@ public class Turn {
      */
     public static final Turn turnByBundle(Bundle bundle) {
         Turn turn = new Turn();
+        turn.setId(bundle.getInt(IDs.ID));
         turn.setDatariferimento(bundle.getString(IDs.DATA));
         turn.setMounth(bundle.getInt(IDs.MONTH));
         if (bundle.containsKey(IDs.INIZIO_MATTINA))
@@ -57,8 +66,14 @@ public class Turn {
         if (bundle.containsKey(IDs.ORE))
             turn.setHour(new Double(bundle.getDouble(IDs.ORE, 0)));
         if (bundle.containsKey(IDs.OVERTIME))
-            turn.setHour(new Double(bundle.getDouble(IDs.OVERTIME, 0)));
+            turn.setOvertime(new Double(bundle.getDouble(IDs.OVERTIME, 0)));
         turn.setIsImportante(bundle.getInt(IDs.PRIORITY));
+        if (bundle.containsKey(IDs.DEL_REQ))
+            turn.setIsOnlyDelete(bundle.getInt(IDs.DEL_REQ));
+        if (bundle.containsKey(IDs.GOOGLE_ID_MATTINA))
+            turn.setGoogleCalendarIDMattina(bundle.getString(IDs.GOOGLE_ID_MATTINA));
+        if (bundle.containsKey(IDs.GOOGLE_ID_POMERIGGIO))
+            turn.setGoogleCalendarIDPomeriggio(bundle.getString(IDs.GOOGLE_ID_POMERIGGIO));
         return turn;
     }
 
@@ -71,7 +86,7 @@ public class Turn {
      */
     public static final Intent intentByTurn(Intent i, Turn turn) {
         i.putExtra(IDs.ID, turn.getId());
-        i.putExtra(IDs.DATA, turn.getDataRierimentoDate());
+        i.putExtra(IDs.DATA, turn.getDataRierimentoDateStr());
         i.putExtra(IDs.INIZIO_MATTINA, turn.getInizioMattina());
         i.putExtra(IDs.FINE_MATTINA, turn.getFineMattina());
         i.putExtra(IDs.INIZIO_POMERIGGIO, turn.getInizioPomeriggio());
@@ -82,6 +97,10 @@ public class Turn {
         i.putExtra(IDs.ORE, turn.getHour());
         i.putExtra(IDs.OVERTIME, turn.getOvertime());
         i.putExtra(IDs.PRIORITY, turn.getIsImportante() ? 1 : 0);
+        i.putExtra(IDs.DEL_REQ, turn.isOnlyDelete() ? 1 : 0);
+        i.putExtra(IDs.GOOGLE_ID_MATTINA, turn.getGoogleCalendarIDMattina());
+        i.putExtra(IDs.GOOGLE_ID_POMERIGGIO, turn.getGoogleCalendarIDPomeriggio());
+
         return i;
     }
 
@@ -203,15 +222,17 @@ public class Turn {
         return datariferimento;
     }
 
-    public Date getDataRierimentoDate() {
-        Date data = null;
+    public Calendar getDataRierimentoDate() {
+        Calendar cal = Calendar.getInstance();
         try {
-            data = new SimpleDateFormat(PATTERN).parse(datariferimento);
+            Date data = new SimpleDateFormat(PATTERN).parse(datariferimento);
+            cal.setTime(data);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return data;
+        return cal;
     }
+
 
     public Integer getInizioMattinaH() {
         return inizioMattinaH;
@@ -219,6 +240,22 @@ public class Turn {
 
     public void setInizioMattinaH(Integer inizioMattinaH) {
         this.inizioMattinaH = inizioMattinaH;
+    }
+
+    public Integer getFineMattinaH() {
+        return fineMattinaH;
+    }
+
+    public void setFineMattinaH(Integer fineMattinaH) {
+        this.fineMattinaH = fineMattinaH;
+    }
+
+    public Integer getFineMattinaM() {
+        return fineMattinaM;
+    }
+
+    public void setFineMattinaM(Integer fineMattinaM) {
+        this.fineMattinaM = fineMattinaM;
     }
 
     public Integer getInizioMattinaM() {
@@ -229,24 +266,6 @@ public class Turn {
         this.inizioMattinaM = inizioMattinaM;
     }
 
-    public void setFineMattinaH(Integer fineMattinaH) {
-        this.fineMattinaH = fineMattinaH;
-    }
-
-    public void setFineMattinaM(Integer fineMattinaM) {
-        this.fineMattinaM = fineMattinaM;
-    }
-
-
-
-    public void setFinePomeriggioH(Integer finePomeriggioH) {
-        this.finePomeriggioH = finePomeriggioH;
-    }
-
-    public void setFinePomeriggioM(Integer finePomeriggioM) {
-        this.finePomeriggioM = finePomeriggioM;
-    }
-
     public Integer getInizioPomeriggioH() {
         return inizioPomeriggioH;
     }
@@ -255,12 +274,28 @@ public class Turn {
         this.inizioPomeriggioH = inizioPomeriggioH;
     }
 
+    public Integer getFinePomeriggioH() {
+        return finePomeriggioH;
+    }
+
+    public void setFinePomeriggioH(Integer finePomeriggioH) {
+        this.finePomeriggioH = finePomeriggioH;
+    }
+
     public Integer getInizioPomeriggioM() {
         return inizioPomeriggioM;
     }
 
     public void setInizioPomeriggioM(Integer inizioPomeriggioM) {
         this.inizioPomeriggioM = inizioPomeriggioM;
+    }
+
+    public Integer getFinePomeriggioM() {
+        return finePomeriggioM;
+    }
+
+    public void setFinePomeriggioM(Integer finePomeriggioM) {
+        this.finePomeriggioM = finePomeriggioM;
     }
 
     public double getHour() {
@@ -393,4 +428,47 @@ public class Turn {
         }
     }
 
+    public String getGoogleCalendarIDMattina() {
+        return googleCalendarIDMattina;
+    }
+
+    public void setGoogleCalendarIDMattina(String googleCalendarID) {
+        this.googleCalendarIDMattina = googleCalendarID;
+    }
+
+    public String getGoogleCalendarIDPomeriggio() {
+        return googleCalendarIDPomeriggio;
+    }
+
+    public void setGoogleCalendarIDPomeriggio(String googleCalendarID) {
+        this.googleCalendarIDPomeriggio = googleCalendarID;
+    }
+
+    public String getGoogleCalendarIDMattina2Rem() {
+        return googleCalendarIDMattina2Rem;
+    }
+
+    public void setGoogleCalendarIDMattina2Rem(String googleCalendarIDMattina2Rem) {
+        this.googleCalendarIDMattina2Rem = googleCalendarIDMattina2Rem;
+    }
+
+    public String getGoogleCalendarIDPomeriggio2Rem() {
+        return googleCalendarIDPomeriggio2Rem;
+    }
+
+    public void setGoogleCalendarIDPomeriggio2Rem(String googleCalendarIDPomeriggio2Rem) {
+        this.googleCalendarIDPomeriggio2Rem = googleCalendarIDPomeriggio2Rem;
+    }
+
+    public boolean isOnlyDelete() {
+        return isOnlyDelete;
+    }
+
+    public void setIsOnlyDelete(boolean isOnlyDelete) {
+        this.isOnlyDelete = isOnlyDelete;
+    }
+
+    public void setIsOnlyDelete(int isOnlyDelete) {
+        this.isOnlyDelete = isOnlyDelete != 0;
+    }
 }

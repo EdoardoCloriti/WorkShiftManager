@@ -2,7 +2,6 @@ package com.cloriti.workshiftmanager.manage;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,19 +12,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cloriti.workshiftmanager.R;
 import com.cloriti.workshiftmanager.WorkShiftManagerSetting;
-import com.cloriti.workshiftmanager.WorkshiftManagerNotifyReciver;
+import com.cloriti.workshiftmanager.selection.ManageCalendar;
 import com.cloriti.workshiftmanager.util.IDs;
-import com.cloriti.workshiftmanager.util.Property;
 import com.cloriti.workshiftmanager.util.Turn;
-import com.cloriti.workshiftmanager.util.db.AccessToDB;
+import com.cloriti.workshiftmanager.util.calendar.GoogleCalendarManager;
 import com.cloriti.workshiftmanager.util.tutorial.WorkshiftManagerTutorial;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 /**
  * Activity per la creazione e inserimento dei turni data una data specifica
@@ -38,6 +32,10 @@ public class CreateWorkShift extends AppCompatActivity {
     private PendingIntent pendingIntent;
     private AlarmManager alarmManager;
     private Turn turn = new Turn();
+    private Intent outputIntent = null;
+
+
+    private GoogleCalendarManager calendarManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +43,7 @@ public class CreateWorkShift extends AppCompatActivity {
         setContentView(R.layout.activity_create_work_shift);
         //gestione della toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setLogo(R.mipmap.ic_launcher);
+        toolbar.setLogo(R.mipmap.ic_insert_invitation_black_48dp);
         toolbar.setTitle(R.string.title_app_upper);
         setSupportActionBar(toolbar);
         //gestione del NavigarionIcon
@@ -57,7 +55,7 @@ public class CreateWorkShift extends AppCompatActivity {
             }
         });
 
-
+        outputIntent = new Intent(getApplicationContext(), ManageCalendar.class);
         final Bundle inputBundle = this.getIntent().getExtras();
         TextView title = (TextView) findViewById(R.id.title_add_turn_menu);
         Button insertMattina = (Button) findViewById(R.id.inserisci_mattina);
@@ -105,6 +103,11 @@ public class CreateWorkShift extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     /**
      * Metodo per sottoscrivere il turno inserito, controllo del CheckBox relativo alla priorità
      */
@@ -113,20 +116,14 @@ public class CreateWorkShift extends AppCompatActivity {
         CheckBox priority = (CheckBox) findViewById(R.id.priority);
         turn.setIsImportante(priority.isChecked());
         turn.setHour();
-        AccessToDB db = new AccessToDB();
-        db.insertTurn(turn, getApplicationContext());
-        if (db.existPropery(Property.NOTIFICA, getApplicationContext()) != 0) {
-            if (!isNull(turn.getInizioMattina()))
-                generateRememberNotify(turn.getInizioMattinaH(), turn.getInizioMattinaM(), turn.getDataRierimentoDateStr());
-            if (!isNull(turn.getInizioPomeriggio()))
-                generateRememberNotify(turn.getInizioPomeriggioH(), turn.getInizioPomeriggioM(), turn.getDataRierimentoDateStr());
-        }
-        turn = null;
+        outputIntent = Turn.intentByTurn(outputIntent, turn);
+        setResult(6, outputIntent);
         finish();
     }
 
     @Override
     public void onBackPressed() {
+        setResult(5, outputIntent);
         finish();
     }
 
@@ -150,41 +147,8 @@ public class CreateWorkShift extends AppCompatActivity {
                     turn.setFinePomeriggio(orarioPomeriggio[1]);
                 }
             }
-        }
-    }
-
-    /**
-     * metodo per la generazione della notifica n minuti prima dell'inizio del turno
-     * n= minuti settati in fase di configuraione, se non settato viene inserito di default
-     *
-     * @param ore
-     * @param minuti
-     * @param data
-     */
-    public void generateRememberNotify(Integer ore, Integer minuti, String data) {
-        //Gestione delle notifiche giornaliere
-        alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(getApplicationContext(), WorkshiftManagerNotifyReciver.class);
-        pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        SimpleDateFormat sdf = new SimpleDateFormat(PATTERN);
-        try {
-            calendar.setTime(sdf.parse(data));
-        } catch (Exception e) {
-            //nel caso non sia una data valida viene gestito semplicemente treamite un Toast, tende all'impossibile
-            Toast.makeText(getApplicationContext(), "Impossibile creare la notifica", Toast.LENGTH_SHORT);
-            return;
-        }
-
-        //setting dell'orario a cui effettuare la notifica
-        calendar.set(Calendar.HOUR_OF_DAY, ore);
-        calendar.set(Calendar.MINUTE, minuti);
-        calendar.add(Calendar.MINUTE, -30);
-
-        //setting dell'allarm manager
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.RTC, pendingIntent);
+        } else if (calendarManager != null)
+            calendarManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -218,13 +182,4 @@ public class CreateWorkShift extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * metdo per la verifica che un orario non sia null (null:null)
-     *
-     * @param orario
-     * @return
-     */
-    private boolean isNull(String orario) {
-        return "null:null".equals(orario) ? true : false;
-    }
 }

@@ -42,7 +42,7 @@ public class WorkshiftManager extends AppCompatActivity {
         setContentView(R.layout.activity_workshift_manager);
         //Setting delle impostazioni della Action Bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setLogo(R.mipmap.ic_launcher);
+        toolbar.setLogo(R.mipmap.ic_insert_invitation_black_48dp);
         toolbar.setTitle(R.string.title_app_upper);
         setSupportActionBar(toolbar);
         //Portait (Verticale)

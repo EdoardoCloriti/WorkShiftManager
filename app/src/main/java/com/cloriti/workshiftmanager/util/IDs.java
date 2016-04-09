@@ -31,4 +31,8 @@ public class IDs {
     public static final String ORE = "ore";
     public static final String PRIORITY = "priority";
     public static final String ID = "id";
+    public static final String DEL_REQ = "del_req";
+    public static final String GOOGLE_ID_MATTINA = "google-id-mattina";
+    public static final String GOOGLE_ID_POMERIGGIO = "google-id-pomeriggio";
+
 }

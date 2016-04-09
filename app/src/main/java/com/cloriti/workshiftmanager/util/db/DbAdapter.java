@@ -14,6 +14,8 @@ public class DbAdapter {
     // COLONNE TABELLA TURN
     // id del DB NUMBER
     public static final String ID = "_id";
+    public static final String GOOGLE_ID_MATTINA = "id_google_calendar_mattina";
+    public static final String GOOGLE_ID_POMERIGGIO = "id_google_calendar_pomeriggio";
     // numero della settimana
     public static final String WEEK_ID = "week_id";
     // year
@@ -64,17 +66,28 @@ public class DbAdapter {
     // creare un turno
     public Long createTurn(String dataRiferimento, int weekId, int year, String oraInizioMattina, String oraFineMattina, String OraInizioPomeriggio, String OraFinePomeriggio, double overtime, double hour, Long priority) {
         try {
-            ContentValues turn = fillTurn(dataRiferimento, weekId, year, oraInizioMattina, oraFineMattina, OraInizioPomeriggio, OraFinePomeriggio, overtime, hour, priority);
+            ContentValues turn = fillTurn(dataRiferimento, weekId, year, oraInizioMattina, oraFineMattina, OraInizioPomeriggio, OraFinePomeriggio, overtime, hour, priority, null, null);
             return database.insertOrThrow(TURN_DATABASE_TABLE, null, turn);
         } catch (Throwable t) {
+            t.getCause();
             return null;
         }
     }
 
     // aggiornare turno
     public boolean updateTurn(int id, int weekId, int year, String dataRiferimento, String oraInizioMattina, String oraFineMattina, String OraInizioPomeriggio, String OraFinePomeriggio, double overtime, double hour, Long priority) {
-        ContentValues turn = fillTurn(dataRiferimento, weekId, year, oraInizioMattina, oraFineMattina, OraInizioPomeriggio, OraFinePomeriggio, overtime, hour, priority);
+        ContentValues turn = fillTurn(dataRiferimento, weekId, year, oraInizioMattina, oraFineMattina, OraInizioPomeriggio, OraFinePomeriggio, overtime, hour, priority, null, null);
         return database.update(TURN_DATABASE_TABLE, turn, ID + "=?", new String[]{Integer.toString(id)}) > 0;
+    }
+
+    public boolean updateTurnWithGoogleCalendarId(int id, int weekId, int year, String dataRiferimento, String oraInizioMattina, String oraFineMattina, String OraInizioPomeriggio, String OraFinePomeriggio, double overtime, double hour, Long priority, String googleIdMattina, String googleIdPomeriggio) {
+        try {
+            ContentValues turn = fillTurn(dataRiferimento, weekId, year, oraInizioMattina, oraFineMattina, OraInizioPomeriggio, OraFinePomeriggio, overtime, hour, priority, googleIdMattina, googleIdPomeriggio);
+            return database.update(TURN_DATABASE_TABLE, turn, ID + "=?", new String[]{Integer.toString(id)}) > 0;
+        } catch (Throwable t) {
+            t.getCause();
+            return false;
+        }
     }
 
     // rimuovere un turno
@@ -84,23 +97,23 @@ public class DbAdapter {
 
     // prendere tutti i dati da DB
     public Cursor fetchAllTurn() {
-        return database.query(TURN_DATABASE_TABLE, new String[]{ID, WEEK_ID, YEAR, REFERENCE_DATE, MATTINA_INIZIO, MATTINA_FINE, POMERIGGIO_INIZIO, POMERIGGIO_FINE, OVERTIME, HOUR, PRIORITY}, null, null, null, null, null);
+        return database.query(TURN_DATABASE_TABLE, new String[]{ID, WEEK_ID, YEAR, REFERENCE_DATE, MATTINA_INIZIO, MATTINA_FINE, POMERIGGIO_INIZIO, POMERIGGIO_FINE, OVERTIME, HOUR, PRIORITY, GOOGLE_ID_MATTINA, GOOGLE_ID_POMERIGGIO}, null, null, null, null, null);
     }
 
     // prende i dati da DB in base a una condizione
     // fetch contacts filter by a string
     public Cursor fetchTurnByDate(String referenceDate) throws ParseException {
-        Cursor mCursor = database.query(TURN_DATABASE_TABLE, new String[]{ID, WEEK_ID, YEAR, REFERENCE_DATE, MATTINA_INIZIO, MATTINA_FINE, POMERIGGIO_INIZIO, POMERIGGIO_FINE, OVERTIME, HOUR, PRIORITY}, REFERENCE_DATE + "=?", new String[]{referenceDate}, null, null, null);
+        Cursor mCursor = database.query(TURN_DATABASE_TABLE, new String[]{ID, WEEK_ID, YEAR, REFERENCE_DATE, MATTINA_INIZIO, MATTINA_FINE, POMERIGGIO_INIZIO, POMERIGGIO_FINE, OVERTIME, HOUR, PRIORITY, GOOGLE_ID_MATTINA, GOOGLE_ID_POMERIGGIO}, REFERENCE_DATE + "=?", new String[]{referenceDate}, null, null, null);
 
         return mCursor;
     }
 
     public Cursor fetchTurnByYear(int year) {
-        Cursor mCursor = database.query(TURN_DATABASE_TABLE, new String[]{ID, WEEK_ID, YEAR, REFERENCE_DATE, MATTINA_INIZIO, MATTINA_FINE, POMERIGGIO_INIZIO, POMERIGGIO_FINE, OVERTIME, HOUR, PRIORITY}, YEAR + "=?", new String[]{Integer.toString(year)}, null, null, null);
+        Cursor mCursor = database.query(TURN_DATABASE_TABLE, new String[]{ID, WEEK_ID, YEAR, REFERENCE_DATE, MATTINA_INIZIO, MATTINA_FINE, POMERIGGIO_INIZIO, POMERIGGIO_FINE, OVERTIME, HOUR, PRIORITY, GOOGLE_ID_MATTINA, GOOGLE_ID_POMERIGGIO}, YEAR + "=?", new String[]{Integer.toString(year)}, null, null, null);
         return mCursor;
     }
 
-    private ContentValues fillTurn(String dataRiferimento, int weekId, int year, String oraInizioMattina, String oraFineMattina, String OraInizioPomeriggio, String OraFinePomeriggio, double overtime, double hour, Long priority) {
+    private ContentValues fillTurn(String dataRiferimento, int weekId, int year, String oraInizioMattina, String oraFineMattina, String OraInizioPomeriggio, String OraFinePomeriggio, double overtime, double hour, Long priority, String googleIdMattina, String googleIdPomeriggio) {
         ContentValues values = new ContentValues();
         values.put(REFERENCE_DATE, dataRiferimento);
         values.put(WEEK_ID, weekId);
@@ -112,6 +125,10 @@ public class DbAdapter {
         values.put(OVERTIME, overtime);
         values.put(HOUR, hour);
         values.put(PRIORITY, Long.toString(priority));
+        if (googleIdMattina != null)
+            values.put(GOOGLE_ID_MATTINA, googleIdMattina);
+        if (googleIdPomeriggio != null)
+            values.put(GOOGLE_ID_POMERIGGIO, googleIdPomeriggio);
 
         return values;
     }

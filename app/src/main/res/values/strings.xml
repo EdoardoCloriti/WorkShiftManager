@@ -30,8 +30,10 @@
     <string name="orecontratto">ORE</string>
     <string name="allarm">Attivare Allarme prima del turno</string>
     <string name="notifiche">Attivare Notifiche</string>
+    <string name="calendar">Attivare Sincronizzazione con Google Calendar</string>
     <string name="title_activity_manage_work_shift">ManageWorkShift</string>
     <string name="title_activity_create_work_shift">CreateWorkShift</string>
+    <string name="req_summary">Nome del Google Calendar</string>
 
     <!-- CreateWorkShift voice -->
     <string name="title_turn_menu">INSERISCI TURNO:</string>

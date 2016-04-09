@@ -15,7 +15,10 @@ public class Property {
     public static final String ORESETTIMANALI = "ore-settimanali";
     public static final String ALLARM = "allarm";
     public static final String NOTIFICA = "notify";
+    public static final String CALENDAR = "calendar";
     public static final String NOTIFICA_MIN = "notify-min";
+    public static final String ACCOUNT = "account";
+    public static final String SUMMARY = "summary";
 
 
     private String property = null;

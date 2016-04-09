@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.cloriti.workshiftmanager.selection.MultiSelectionMenu;
 import com.cloriti.workshiftmanager.util.Property;
+import com.cloriti.workshiftmanager.util.calendar.GoogleCalendarManager;
 import com.cloriti.workshiftmanager.util.db.AccessToDB;
 import com.cloriti.workshiftmanager.util.notification.WorkShiftManagerAlarmService;
 import com.cloriti.workshiftmanager.util.notification.WorkShiftManagerNotificationService;
@@ -30,7 +32,9 @@ import com.cloriti.workshiftmanager.util.tutorial.WorkshiftManagerTutorial;
  */
 public class WorkShiftManagerSetting extends AppCompatActivity {
 
+    private GoogleCalendarManager calendarManager;
     private Dialog selectMinuteToNotfiedDialog;
+    private Dialog settingCalendarDialog;
     private Intent m = null;
 
     @Override
@@ -39,7 +43,7 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
         setContentView(R.layout.activity_work_shift_manager_setting);
         //Setting delle impostazioni della Action Bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setLogo(R.mipmap.ic_launcher);
+        toolbar.setLogo(R.mipmap.ic_insert_invitation_black_48dp);
         toolbar.setTitle(R.string.title_app_upper);
         setSupportActionBar(toolbar);
         //setting del navigation button per tornare indietro
@@ -61,6 +65,14 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
         notify.setOnCheckedChangeListener(null);
         if (db.existPropery(Property.NOTIFICA, getApplicationContext()) != 0) {
             if ("true".equals(db.getProperty(Property.NOTIFICA, getApplicationContext()).getValue()))
+                notify.setChecked(true);
+            else
+                notify.setChecked(false);
+        }
+
+        CheckBox calendar = (CheckBox) findViewById(R.id.calendar);
+        if (db.existPropery(Property.CALENDAR, getApplicationContext()) != 0) {
+            if ("true".equals(db.getProperty(Property.CALENDAR, getApplicationContext()).getValue()))
                 notify.setChecked(true);
             else
                 notify.setChecked(false);
@@ -112,6 +124,23 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
             }
         });
 
+        calendar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    AccessToDB db = new AccessToDB();
+                    Property p = new Property();
+                    p.setProperty(Property.SUMMARY);
+                    p.setValue("WorkShiftManager");
+                    db.insertProperty(p, getApplicationContext());
+
+                    calendarManager = new GoogleCalendarManager(getApplicationContext(), WorkShiftManagerSetting.this);
+                    calendarManager.createGoogleCalendar();
+                    calendarManager.getResultsFromApi();
+                }
+            }
+        });
+
         setStateOre(db);
         setStateNotify(db);
     }
@@ -124,6 +153,7 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
     private void submit() {
         EditText oreContratto = (EditText) findViewById(R.id.ore);
         CheckBox notify = (CheckBox) findViewById(R.id.notify);
+        CheckBox calendar = (CheckBox) findViewById(R.id.calendar);
         boolean check = true;
         String ore = oreContratto.getText().toString();
         AccessToDB db = new AccessToDB();
@@ -137,6 +167,7 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
 
         //se la validazione delle ore settimanali immesse passa la validazione si può procede con l'inserimento
         if (check) {
+            manageCalendarEntry(calendar, db);
             manageNotify(notify, db);
             insertWeeklyHours(ore, db);
             //controlla se esite la Property su DB che flegga il primo accesso e la Aggiorna
@@ -264,6 +295,22 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
         }
     }
 
+    /***
+     * Metodo per la gestione delle iscrizioni alla sincronizzazione con Google <code>Calendar</code>
+     *
+     * @param calendar
+     * @param db
+     */
+    public void manageCalendarEntry(CheckBox calendar, AccessToDB db) {
+        //prepato la property che gestisce l'iscrizione
+        Property propery = new Property();
+        propery.setProperty(Property.CALENDAR);
+        propery.setValue(calendar.isChecked() ? "true" : "false");
+
+        //inserimento della property
+        db.insertProperty(propery, getApplicationContext());
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -287,5 +334,29 @@ public class WorkShiftManagerSetting extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean isSynchCalendarReq(AccessToDB db) {
+        if (db.existPropery(Property.CALENDAR, getApplicationContext()) != 0) {
+            Property calendar = db.getProperty(Property.CALENDAR, getApplicationContext());
+            if ("true".equals(calendar.getValue())) {
+                return true;
+            } else
+                return false;
+        } else
+            return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        calendarManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        calendarManager.onActivityResult(requestCode, resultCode, data);
     }
 }

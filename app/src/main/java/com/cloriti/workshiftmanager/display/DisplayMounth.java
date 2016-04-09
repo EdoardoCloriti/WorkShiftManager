@@ -32,6 +32,7 @@ public class DisplayMounth extends AppCompatActivity {
         //Gestione della toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.title_app_upper);
+        toolbar.setLogo(R.mipmap.ic_insert_invitation_black_48dp);
         //Gestione della navigation icon
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_48dp);
         setSupportActionBar(toolbar);

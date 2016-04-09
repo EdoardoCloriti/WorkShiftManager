@@ -33,7 +33,7 @@ public class DisplayYear extends AppCompatActivity {
         setContentView(R.layout.activity_display_year);
         //Gestione della toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setLogo(R.mipmap.ic_launcher);
+        toolbar.setLogo(R.mipmap.ic_insert_invitation_black_48dp);
         toolbar.setTitle(R.string.title_app_upper);
         setSupportActionBar(toolbar);
         //Gestione del Navigarion button
