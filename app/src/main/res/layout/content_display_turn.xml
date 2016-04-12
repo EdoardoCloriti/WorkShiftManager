@@ -83,7 +83,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/iniziopomevalue"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="27dp"
             android:text="@string/importanza"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -91,8 +90,8 @@
             android:id="@+id/orefuoricontratto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/orevalue"
-            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/ore"
+            android:layout_toStartOf="@+id/mattina"
             android:text="@string/over"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -147,19 +146,16 @@
             android:id="@+id/overvalue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignRight="@+id/pomeriggio"
-            android:layout_below="@+id/orefuoricontratto"
-            android:layout_centerHorizontal="true"
-            android:text=""
+            android:layout_alignEnd="@+id/orevalue"
+            android:layout_below="@+id/orevalue"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/ore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/orefuoricontratto"
-            android:layout_below="@+id/importante"
-            android:layout_toLeftOf="@+id/finepomeriggio"
+            android:layout_above="@+id/delete"
+            android:layout_toStartOf="@+id/importante"
             android:text="@string/display_ore"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -167,9 +163,8 @@
             android:id="@+id/orevalue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/ore"
-            android:layout_alignRight="@+id/orefuoricontratto"
-            android:layout_below="@+id/ore"
+            android:layout_alignEnd="@+id/importante"
+            android:layout_below="@+id/importante"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <CheckBox

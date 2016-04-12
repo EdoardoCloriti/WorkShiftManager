@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/mesestr"
         android:layout_toEndOf="@+id/title"
-        android:text="@string/year"
+        android:text="@string/anno"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText

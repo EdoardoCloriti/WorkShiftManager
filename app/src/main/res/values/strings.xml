@@ -64,7 +64,7 @@
     <!-- DisplaysWorkShift -->
     <string name="riposo">Riposo</string>
     <string name="importanza">RIUNIONE</string>
-    <string name="over">ORE FUORI CONTRATTO:</string>
+    <string name="over">STRAORDINARI:</string>
     <string name="display_ore">ORE:</string>
     <string name="inizio">INIZIO:</string>
     <string name="fine">FINE:</string>
